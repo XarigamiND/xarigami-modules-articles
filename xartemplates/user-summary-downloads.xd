@@ -1,0 +1,37 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<div class="xar-norm xar-standard-box-padding">
+    <h3><a href="#$link#">#$title#</a></h3>
+    <xar:if condition="!empty($categories) and count($categories) gt 0">[
+    <xar:foreach in="$categories" value="$cat">#$cat['cjoin']#
+    <a href="#$cat['clink']#">#$cat['cname']#</a>
+    </xar:foreach>]
+    </xar:if>
+    <div class="xar-form-input-wrapper">
+        #$summary#
+    </div>
+
+    <xar:if condition="empty($notes)">
+    <xar:elseif condition="xarModIsHooked('uploads','articles',$pubtypeid) and substr($notes,0,1) eq ';'" />
+        <xar:comment>If you hook the uploads module to articles, then file upload fields will contain a comma-separated list of file ids, and you will need to call an API function to retrieve the file information. For dynamic extra fields, you can use [fieldname]_output directly to access the file information.</xar:comment>
+        <xar:set name="notes_output">xarModAPIFunc('uploads','user','showoutput',array('value' => $notes, 'multiple' => true))</xar:set>
+        <div>
+            <label class="xar-form-label"><xar:mlstring>Download:</xar:mlstring></label>
+            <xar:foreach in="$notes_output" key="$fileid" value="$fileinfo">
+                <img src="#$fileinfo['mimeImage']#" title="#$fileinfo['fileName']#" alt="#$fileinfo['fileName']# - #$fileinfo['fileType']#" />&#160;
+                <a href="#$fileinfo['fileDownload']#">#$fileinfo['fileName']#</a>
+           </xar:foreach>
+        </div>
+    <xar:else />
+    <p>
+        <label class="xar-displayinline"><xar:mlstring>Download:</xar:mlstring></label>
+        #$notes#
+    </p>
+    </xar:if>
+    <div class="xar-articles-keywords">
+        <xar:if condition="!empty($keywords)">
+        <xar:mlstring>Keywords</xar:mlstring>:
+        <xar:loop name="$keywords">
+            <a href="#xarModUrl('keywords', 'user', 'main', array('keyword' => $loop:item['keyword']))#" title="#$loop:item['keyword']#">#$loop:item['keyword']#</a>
+        </xar:loop></xar:if>
+    </div>
+</div>

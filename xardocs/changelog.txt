@@ -1,0 +1,142 @@
+Version 1.7.5 :
+- xart-001060 : FEATURE Last frontpage showed in user GUI display function if no args are passed. 
+
+Version 1.7.4 :
+- xart-001031 BUG - last update time incorrect without checkin/checkout
+- xart-000964 BUG   Status for Edit level reverts to 0
+- xart-001000 FEATURE Usermenu article list
+- support for passing name as argument to new document
+- ability to pass in page title on display
+
+Version 1.7.2 :
+- xart-000909 NEW FEATURE Restrict prev/next article within nav categories plus implement continuous catnav in user/display
+-             IMPROVEMENT add more sort options in getprevious/getnext
+
+Version 1.7.1 : 2011-08-17 by 2skies.com
+----------------------------------------
+- xart-000798 IMPROVEMENT Update for new dd configurations
+- xart-000799 IMPROVEMENT import/export for new DD configs
+- xart-000800 NEW FEATURE SEO/friendly URLS in addition to existing
+- xart-000835 Bug File upload not transformed
+- xart-000834 Improvement   Only show hooked DD that is 'active'
+- xart-000833 Improvement   Automatically show hooked DD in templates
+Many other improvements and fixes to integrate core 1.4 features (simplier markup, status messages, tabs,...)
+
+Version 1.6.0 : 2010-06-22 by 2skies.com
+----------------------------------------
+- xart-000494  Ratings display in Topitems broken
+- xart-000493 Top items and hitcount display incorrect
+- xart-000581 BUG Fix use of + in short URLS
+- xart-000495 Hooks for 'all' not accounted for in getall.php
+- xart-000490 NEW FEATURE Addition of JQuery behaviours throughout admin templates
+- xart-000489 NEW FEATURE Sort by and ordering in Admin View
+- xart-000167 NEW FEATURE Archive facility for documents including auto archive
+- xart-000577 NEW FEATURE change pubtype, ability to change the pubtype for a given article (use with caution)
+  This moves common hooked data with the article. Dynamic data will not be moved and also is not deleted.
+- xart-000579 NEW FEATURE Clone and article
+- xart-000305 NEW FEATURE Draft document status and features
+- xart-000580 NEW FEATURE Publish to live
+- xart-000480 NEW FEATURE ASC Date order sort for top items block
+- Ensure there is an Add link in pages in case inpage tab menus are off
+- xart-000592 IMPROVEMENT Move all old 'archive' functions, templates and references to 'monthview'
+- IMPROVEMENT: Change selection of Pubtype to drop down selection rather than tabs
+- Move all old 'archive' view file references and templates to 'monthview'
+
+
+Version 1.5.7 : 2009-10-25 by 2skies.com
+----------------------------------------
+- Added new moderate articles mask
+- Added ability to check out article in bulk - similar to 'lock' facility
+- Updated relevant functions to now only show approve etc or checking if moderator level or above
+- Allow users to more easily access submitted documents if they have edit/own access
+- Updated the Status property so it only displays drop down when the user has access rights to it (moderate level)
+- Users with Edit access can no longer approve articles - they must have Moderate access level
+- Template changes:
+    : admin-view.xd - added new $canmod variable to replace check for editing access. This prevents users from accessing the
+                        dropdown options to approve to frontpage, approved, etc and also removes the checkbox for these bulk actions.
+                        Check for this $canmod variable in a number of places in the template
+                    - Remove new article link - just use the Add article tab
+                    - added new drop down selector for pubtypes
+                    - added new bulk checkout facility - this needs to be added
+    : admin-modifyconfig.xd - added new dropdown options for pubtypes
+    : admin-new.xd - added new dropdown options for pubtypes
+
+- UPGRADE NOTE:
+  -For sites that allow users to edit and approve documents, please change your privilege level for these users to ModerateAccess instead of Edit Access.
+
+Version 1.5.6 : 2007-07-25 by 2skies.com
+----------------------------------------
+Updated for new core security management of blocks.
+Articles instances for blocks removed and block security checks.
+This is all now handled from xarigami core.
+
+
+Version 1.5.5 : 2007-07-19 by 2skies.com
+----------------------------------------
+
+- Get rid of the create hook. Incorrectly added from another articles scenario.
+- Database upgrade for hook removal
+
+Other changes in this version:
+- fixes for pubtype dropdown selection validations
+- other minor bug fixes in articles
+- various small features
+
+- Added simple 'group by category' as an option for display of article summaries
+  This displays summaries in one page, grouped by categories.
+  The categories used for grouping are subcategories of one category nominated in the
+  article pubtype configuration.
+- No db changes for group by category
+- Templates must be updated specifically:
+
+  :user-view.xd  - and overrides.  Please see user-view.xd for changes.
+
+
+Version 1.5.4 : 2007-07-17 by 2skies.com
+----------------------------------------
+- Finalized basic article checkin- checkout capability. Currently implemented
+  as changes in the articles tables as we want to integrate this with changelog
+  and currently having 2 hooks without control of order of action complicates
+  implmentation. For now, there is simple checkin-checkout capability,
+  article versioning coming soon.
+
+- There are database upgrades - should upgrade smoothly in usual xaraya upgrade process
+  from modules admin. Activate the module afterwards.
+
+- There are key template changes in system templates. These must be updated in your own
+  theme overrides. Templates and reasoning as follows:
+  : admin-view.xd - critical changes here in a few places (noted) to display
+                    whether an article is checked in or out.
+                  - You must updated your overrides for admin-view.xd with the
+                    changes including admin-view-*.xt.
+                    Edit and delete links are inactive when an article
+                    is checked out, except for the author currently editing.
+                    Checkout time and editor is noted.
+                  - bulk checking also implemented via the select all/deselect all
+                     checkboxes.
+ : admin-modify.xd - critical change here to display a checkbox that is used
+                     to choose whether a an article is checked back in or not
+                     on saving and exit from editing of the document.
+                     This change must be added to all your overrides for
+                     admin-modify.xd including admin-modify-*.xt files
+                     Change is noted in admin-modify.xd
+ : user-display.xd - this is an optional change that must be implemented in
+                     all your user-display-*.xt overrides.
+                     Has two purposes:
+                     - to display the last edit time (and editor if so desired)
+                       from the last checkin time
+                     - integrates changelog hook display with the checkin-checkout
+                       if changelog module is hooked so the last edit time
+                       is taken over by changelog.
+
+Note that checkin-checkout functionality is a different process to
+changelog history although shares similar functionality. The integration between
+both checkin-checkout functionality and changelog will be integrated in future versions
+and the checkin-checkout functionality extended to other modules.
+
+Version 1.5.3 : 2007-07-17 by 2skies.com
+-------------------------------------
+Interim version - commencement of checkin-checkout functionality for urgent requirement.
+Unstable version.
+
+

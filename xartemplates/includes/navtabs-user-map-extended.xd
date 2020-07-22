@@ -1,0 +1,48 @@
+<xar:style scope="module" module="base" file="tabs" />
+<xar:set name="by">isset($by)? $by : ''</xar:set>
+<xar:set name="request">xarRequestGetInfo()</xar:set>
+<xar:set name="activetab">#$request.2#</xar:set>
+<ul class="xar-tabs">
+    <xar:set name="tabclass">($activetab == 'viewmap' and $by == 'cat')?'xar-tab-active':'xar-tab'</xar:set>
+    <li class="#$tabclass#">
+        <a href="#xarModURL('articles','user','viewmap',array('by' => 'cat'))#">
+            <xar:mlstring>
+                Article Map by Category
+            </xar:mlstring>
+        </a>
+    </li>
+    <xar:set name="tabclass">$by == 'pub'?'xar-tab-active':'xar-tab'</xar:set>
+    <li class="#$tabclass#">
+        <a href="#xarModURL('articles','user','viewmap',array('by' => 'pub','ptid' => $ptid))#">
+            <xar:mlstring>
+                Article Map by Publication Type
+            </xar:mlstring>
+        </a>
+    </li>
+    <xar:if condition="count($catfilter) eq 2">
+        <xar:set name="tabclass">$by == 'grid'?'xar-tab-active':'xar-tab'</xar:set>
+        <li class="#$tabclass#">
+            <a href="#xarModURL('articles','user','viewmap',array('by' => 'grid'))#">
+                <xar:mlstring>
+                    Article Map by Grid
+                </xar:mlstring>
+            </a>
+        </li>
+    </xar:if>
+    <xar:if condition="!empty($viewlink)">
+        <xar:set name="tabclass">$activetab == 'view'?'xar-tab-active':'xar-tab'</xar:set>
+        <li class="#$tabclass#">
+            <a href="#$viewlink#">
+                #$viewlabel#
+            </a>
+        </li>
+    </xar:if>
+    <xar:if condition="!empty($monthviewlink)">
+        <xar:set name="tabclass">$activetab == 'monthview'?'xar-tab-active':'xar-tab'</xar:set>
+            <li class="#$tabclass#">
+                <a href="#$monthviewlink#">
+                    #$monthviewlabel#
+                </a>
+            </li>
+    </xar:if>
+</ul>

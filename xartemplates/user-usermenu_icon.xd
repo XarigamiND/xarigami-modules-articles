@@ -1,0 +1,11 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:set name="compare">&xar-currenturl;</xar:set>
+<xar:set name="current">xarModURL('roles', 'user', 'account', array('moduleload' => 'articles'))</xar:set>
+<xar:set name="tabclass">$compare == $current?'xar-tab-active':'xar-tab'</xar:set>
+<li class="#$tabclass#">
+    <a href="#xarModURL('roles', 'user', 'account', array('moduleload' => 'articles'))#">
+        <xar:mlstring>
+            Articles
+        </xar:mlstring>
+    </a>
+</li>

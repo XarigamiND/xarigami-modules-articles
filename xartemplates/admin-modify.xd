@@ -1,0 +1,151 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:base-include-javascript libname="jquery" libfile="jquery.min" position="head"/>
+<div class="xar-mod-page">
+    <div class="xar-mod-head">
+        <xar:if condition="!xarRequestIsAJAX()">
+          <xar:template type="module"  module="base" file="admin-menu" />
+        </xar:if>
+    </div>
+    <div class="xar-mod-body">
+            <h1>
+                <xar:ml>
+                    <xar:mlstring>Editing #(1)</xar:mlstring>
+                    <xar:mlvar>#$pubtype#</xar:mlvar>
+                </xar:ml>
+            </h1>
+         <div class="xar-mod-content">
+
+            <xar:if condition="!empty($preview)">
+                <div class="xar-preview">
+                    #$preview#
+                </div>
+            </xar:if>
+            <xar:comment>You can use different admin-modify-[pubtype].xd templates for different pubtypes
+            </xar:comment>
+            <xar:comment>retrieve the previous article in publication type ptid (with any status here)</xar:comment>
+            <xar:comment>
+                <xar:set name="prevartinfo">
+                    #xarModAPIFunc('articles','user','getprevious',array('ptid' => $ptid, 'aid' => $aid, 'status' => array(0,1,2,3)))#
+                </xar:set>
+            </xar:comment>
+
+            <xar:comment>retrieve the next article in publication type ptid (with any status here)</xar:comment>
+            <xar:comment>
+                <xar:set name="nextartinfo">
+                    #xarModAPIFunc('articles','user','getnext',array('ptid' => $ptid, 'aid' => $aid, 'status' => array(0,1,2,3)))#
+                </xar:set>
+            </xar:comment>
+
+            <xar:comment>show a link to modify the previous article with title</xar:comment>
+            <xar:comment>
+                <xar:if condition="!empty($prevartinfo['aid'])">
+                    <a href="#xarModURL('articles','admin','modify',array('aid' => $prevartinfo['aid']))#">&lt;&lt; #xarVarPrepHTMLDisplay($prevartinfo['title'])#</a>
+                </xar:if>
+            </xar:comment>
+
+            <xar:comment>show a link to modify the next article with title</xar:comment>
+            <xar:comment>
+                <xar:if condition="!empty($nextartinfo['aid'])">
+                    <a href="#xarModURL('articles','admin','modify',array('aid' => $nextartinfo['aid']))#">#xarVarPrepHTMLDisplay($nextartinfo['title'])# &gt;&gt;</a>
+                </xar:if>
+            </xar:comment>
+
+            <xar:if condition="!empty($withupload)">
+                <xar:set name="enctype">
+                    'multipart/form-data'
+                </xar:set>
+                <xar:else />
+                <xar:set name="enctype">
+                    'application/x-www-form-urlencoded'
+                </xar:set>
+            </xar:if>
+            <form method="post" id="post" action="&xar-modurl-articles-admin-update;" enctype="#$enctype#" #$formhooks['formaction']# >
+                <div class="xar-form-input-wrapper">
+                    <label class="help xar-form-label" title="#xarML('This is the publication type that this article will appear in.')#">
+                        <xar:mlstring>
+                            Publication Type
+                        </xar:mlstring>
+                    </label>
+                    #$values['pubtype']#
+                    <xar:set name="firstline">xarML('Select pubtype to change to');</xar:set>
+                    <xar:if condition="$canchangepubtype">
+                        <xar:data-input type="dropdown" firstline="$firstline" name="newpubtype" id="newpubtype" value="" validation="$dropdowns" />
+                    </xar:if>
+                </div>
+                <xar:comment>Instead of looping over all fields, you can also access individual
+                             field definitions via $fields['title'], $fields['summary'] etc.
+                </xar:comment>
+                <xar:comment>
+                    Contrary to admin-new.xd, it is not recommended to use $field['definition']['preset'] here
+                </xar:comment>
+
+                <xar:foreach in="$fields" value="$field">
+                    <div class="xar-form-input-wrapper">
+                        <label class="help xar-form-label" title="#$field['label']#" for="#$field['id']#">#$field['label']#</label>
+                        <xar:articles-field definition="$field['definition']" />
+                    </div>
+                </xar:foreach>
+                <xar:if condition="!empty($formhooks['formdisplay'])">
+                    <div class="xar-form-input-wrapper">
+                        <label class="help xar-form-label" title="#xarML('Form Controls as determined by hook selection.')#">
+                            <xar:mlstring>
+                                Form Controls
+                            </xar:mlstring>
+                        </label> #$formhooks['formdisplay']#
+                    </div>
+                </xar:if>
+                <xar:if condition="!empty($hooks)">
+                    <xar:foreach in="$hooks" key="$hookmodule">
+                        #$hooks[$hookmodule]#
+                    </xar:foreach>
+                </xar:if>
+                <div class="xar-form-input-wrapper">
+                    <label class="help xar-form-label" title="#xarML('This is the allowed HTML that this website has configured.')#">
+                        <xar:mlstring>
+                            Allowed HTML tags
+                        </xar:mlstring>
+                    </label>
+                    <div class="xar-form-container-after">
+                        #$allowedhtml#
+                    </div>
+                </div>
+
+                <xar:comment>Added for check out check in functionality Article v1.5.4</xar:comment>
+                <xar:if condition="$usecheckout eq 1">
+                <div class="xar-form-input-wrapper">
+                    <label class="help xar-form-label" title="#xarML('Check in this article on save?')#">
+                        <xar:mlstring>Check in article on save?</xar:mlstring>
+                    </label>
+                    <xar:data-input type="checkbox" id="checkin" name="checkin" value="1" />
+                </div>
+                </xar:if>
+                <xar:comment>End  check out check in </xar:comment>
+
+                <div class="xar-form-footer">
+                        <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                    <input type="hidden" name="aid" id="aid" value="#$aid#" />
+                    <input type="hidden" name="ptid" id="ptid" value="#$ptid#" />
+                    <input type="hidden" name="itemtype" id="itemtype" value="#$ptid#" />
+                    <input type="hidden" name="return_url" value="#$return_url#" />
+                    <input type="submit" name="preview" id="preview" value="#$previewlabel#" />
+                    <xar:if condition="$canedit eq 1">
+                        <input type="submit" name="save" id="save" value="#xarML('Save and Edit')#" />
+                    </xar:if>
+                    <input type="submit" value="#$updatelabel#" />
+                    <xar:comment>
+                        show a link to delete the article
+                    </xar:comment>
+                    <xar:comment>
+                        <xar:sec mask="DeleteArticles" catch="false">
+                            <a href="#xarModURL('articles','admin','delete',array('aid' => $aid))#">
+                                <xar:mlstring>
+                                    Delete Article
+                                </xar:mlstring>
+                            </a>
+                        </xar:sec>
+                    </xar:comment>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

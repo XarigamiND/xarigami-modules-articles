@@ -1,0 +1,104 @@
+<xar:set name="checkall"><xar:mlstring>Check all</xar:mlstring></xar:set>
+<xar:set name="checknone"><xar:mlstring>Uncheck all</xar:mlstring></xar:set>
+<xar:set name="toggleall"><xar:mlstring>Toggle</xar:mlstring></xar:set>
+<xar:set name="checktext"><xar:mlstring>&#160;&#160;&#160;&#160;Check all with status: </xar:mlstring></xar:set>
+<xar:set name="statelist">isset($states)?json_encode($states):'';</xar:set>
+
+<xar:set name="articlescode">"
+jQuery(document).ready(function() {
+    var dialog_width = 300;
+    var dialog_height = 200;
+    var checkall = \"$checkall\";
+    var checknone = \"$checknone\";
+    var toggleall = \"$toggleall\";
+    var statelist = $statelist;
+    var checktext = \"$checktext\";
+    var liststring = '';
+    var i=0;
+    var toggleset = jQuery.each(statelist, function() {
+      if (i == 0) {
+       liststring = liststring + checktext;
+      } else {
+          liststring = liststring + ' | ';
+      }
+      liststring = liststring + '<a href=\"#\" id=\"articles_checkstatus_' + i +'\">'+this+'</a> ';
+      i=i+1;
+    });
+
+    jQuery('#checkcontrols').append('<a href=\"#\" id=\"articles_checkall\">'+checkall+'</a> | <a href=\"#\" id=\"articles_checknone\">'+checknone+'</a> | <a href=\"#\" id=\"articles_checktoggle\">'+toggleall+'</a>' + liststring);
+    //status change
+    jQuery('form#pubtypelist select#ptidselect').change(function() { this.form.submit(); });
+    jQuery('form#viewarticles').submit(function() {
+        if (document.getElementById('status').value == '-1') {
+          jQuery('#"."xardialogtarget').remove();
+           jQuery('body').append('" . chr(60) . "div id=\'xardialogtarget\' style=\'display: none;\'" . chr(62) . chr(60) . "/div" . chr(62) . "');
+            jQuery('#" . "xardialogtarget').html('" . chr(60) . "p" . chr(62) . xarML('WARNING! All selected articles will be deleted. Do you really want to do this?') .  chr(60) . "/p" . chr(62) . "');
+            jQuery('#" . "xardialogtarget').dialog({
+                title: '" . xarML('Bulk delete articles') . "',
+                width: dialog_width,
+                height: dialog_height,
+                buttons: {
+                    '". xarML('Cancel') . "': function() { jQuery(this).dialog('close'); },
+                    '". xarML('Delete') . "': function() { jQuery(this).dialog('close'); document.viewarticles.submit();  }
+                },
+                modal: true,
+                draggable: false,
+                resizable: false
+            });
+        return false;
+        }
+     });
+
+    jQuery('a#" . "articles_checkall').click(function() { jQuery('form#" . "viewarticles table.xar-items input[type=checkbox]').attr('checked',true);return false; });
+    jQuery('a#" . "articles_checknone').click(function() { jQuery('form#" . "viewarticles table.xar-items input[type=checkbox]').attr('checked',false);return false; });
+    jQuery('a#" . "articles_checktoggle').click(function() { jQuery('form#" . "viewarticles table.xar-items input[type=checkbox]').each(function() { jQuery(this).attr('checked', !jQuery(this).attr('checked')); });return false; });
+    jQuery('a" . "[id^=articles_checkstatus]').click(function() { jQuery('form#" . "viewarticles table.xar-items input[type=checkbox].status-' + jQuery(this).attr('id').replace('articles_checkstatus_','')).attr('checked',true);return false; });
+
+    jQuery('table.xar-items a[id^=delete]').click(function() {
+        var a = this;
+        jQuery('#"."xardialogtarget').remove();
+        jQuery('body').append('" . chr(60) . "div id=\'xardialogtarget\' style=\'display: none;\'" . chr(62) . chr(60) . "/div" . chr(62) . "');
+        jQuery('#" . "xardialogtarget').html('" . chr(60) . "p" . chr(62) . xarML('Delete this article?') .  chr(60) . "/p" . chr(62) . chr(60) . "p style=\'text-align: center;\'" . chr(62) . "' + jQuery.trim(jQuery(this).parent().parent().children(':first').text()) + '" . chr(60) . "/p" . chr(62) . "');
+        jQuery('#" . "xardialogtarget').dialog({
+            title: '" . xarML('Delete article') . "',
+            width: dialog_width,
+            height: dialog_height,
+            buttons: {
+                '". xarML('Cancel') . "': function() { jQuery(this).dialog('close'); },
+                '". xarML('Delete') . "': function() { a.setAttribute('href', a.getAttribute('href') + '" . chr(38) . "confirm=1');jQuery(this).dialog('close');window.location = a.getAttribute('href'); }
+            },
+            modal: true,
+            draggable: false,
+            resizable: false
+        });
+        return false;
+    });
+    //bulk delete
+    jQuery('form#" . "viewarticles').submit(function() {
+    var numchecked = jQuery(this).find('input[type=checkbox]:checked').length;
+        if (jQuery('#"."status').val() == '-1' " . chr(38) . chr(38) . " numchecked " . chr(62) . " 0) {
+            jQuery('#"."xardialogtarget').remove();
+            jQuery('body').append('" . chr(60) . "div id=\'xardialogtarget\' style=\'display: none;\'" . chr(62) . chr(60) . "/div" . chr(62) . "');
+            jQuery('#" . "xardialogtarget').html('" . chr(60) . "p" . chr(62) . xarML('Delete all selected articles?') .  chr(60) . "/p" . chr(62) . chr(60) . "p style=\'text-align: center;\'" . chr(62) . "' + numchecked + ' " . xarML("Selected") . chr(60) . "/p" . chr(62) . "');
+            jQuery('#" . "xardialogtarget').dialog({
+                title: '" . xarML('Bulk Delete Articles') . "',
+                width: dialog_width,
+                height: dialog_height,
+                buttons: {
+                    '". xarML('Cancel') . "': function() { jQuery(this).dialog('close');return false; },
+                    '". xarML('Delete') . "': function() { jQuery('form#" . "viewarticles').get(0).submit();return true; }
+                },
+                modal: true,
+                draggable: false,
+                resizable: false
+            });
+                return false;
+            }
+        else {
+            return true;
+        }
+    });
+});
+"</xar:set>
+<xar:base-include-javascript type="code" code="$articlescode" position="body"/>
+

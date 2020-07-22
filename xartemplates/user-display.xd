@@ -1,0 +1,101 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<div class="xar-mod-page">
+    <div class="xar-mod-head">
+        <xar:template type="module" module="articles" file="user-menu" />
+    </div>
+    <div class="xar-mod-body">
+        <xar:categories-navigation layout="trails" showchildren="1" module="articles" itemtype="$ptid" itemid="$aid" cids="$cids" showcatcount="$showcatcount" showempty="0" />
+        <xar:if condition="!$ispreview">
+
+       </xar:if>
+        <h1> #$title#
+            <xar:if condition="!empty($editurl)"> [<a href="#$editurl#">#$edittitle#</a>]</xar:if>
+        </h1>
+        <div class="xar-mod-content">
+            <xar:if condition="xarSecurityCheck('AdminArticles',0,'Article', $ptid.':All:All:All')">
+            <div class="xar-message-error">
+                <p>
+                    <xar:mlstring>
+                        <strong>Note:</strong> when you create a new publication type,
+                        the articles module will automatically use the templates
+                        <em>user-display-[publicationtype].xt</em>
+                        and <em>user-summary-[publicationtype].xt</em>. Please create these by copying the appropriate
+                        Articles display and summary template to your theme and renaming them.
+                        </xar:mlstring><br />
+                        <xar:mlstring>If those templates do not exist when you try to preview or display a new article,
+                        anyone with admin level access  will get this warning :-)
+                    </xar:mlstring>
+                    <xar:mlstring>
+                        Please place your own templates in themes/<em>yourtheme</em>/modules/articles . The templates will get the extension .xt there.
+                    </xar:mlstring>
+                </p>
+            </div>
+            </xar:if>
+
+            <xar:if condition="isset($author)">
+            <p><strong><xar:mlstring>Author</xar:mlstring>:</strong>&#160;#$author#</p>
+            </xar:if>
+            <xar:if condition="isset($pubdate)">
+            <p>
+                <xar:ml>
+                    <xar:mlstring><strong>Date:</strong> #(1) #(2) or #(3)</xar:mlstring>
+                    <xar:mlvar>#xarLocaleGetFormattedDate('long',$pubdate)#</xar:mlvar>
+                    <xar:mlvar>#xarLocaleGetFormattedTime('long',$pubdate)#</xar:mlvar>
+                    <xar:mlvar>#xarLocaleFormatDate('%a, %d %B %Y %H:%M:%S %Z',$pubdate)#</xar:mlvar>
+                </xar:ml>
+            </p>
+            </xar:if>
+            <xar:if condition="isset($summary)">
+            <p><strong><xar:mlstring>Summary</xar:mlstring>:</strong>&#160;#$summary#</p>
+            </xar:if>
+            <xar:if condition="isset($body)">
+            <p><strong><xar:mlstring>Body</xar:mlstring>:</strong>&#160;#$body#</p>
+            </xar:if>
+            <xar:if condition="isset($notes)">
+            <p><strong><xar:mlstring>Notes</xar:mlstring>:</strong>&#160;#$notes#</p>
+            </xar:if>
+            <xar:comment>
+                Hooked DD now available for active, and display,view only DD props from V 1.7.0
+                You can use the normal method of outputting hooked properties using the xar:data-output tag or
+                use the articles method of #$fieldname_output#
+            </xar:comment>
+            <xar:if condition="isset($properties) and count($properties) gt 0">
+            <xar:foreach in="$properties" key="$name">
+            <div class="xar-form-input-wrapper">
+                <xar:data-label property="$properties[$name]" label="id" />
+                <xar:data-output  property="$properties[$name]" value="$properties[$name]-&gt;value" />
+            </div>
+            </xar:foreach>
+            </xar:if>
+            <xar:comment>Changed for check out check in functionality Article v1.5.4</xar:comment>
+            <xar:if condition="!empty($hooks) and !empty($hooks['changelog'])">
+                <p>#$hooks['changelog']#</p>
+            <xar:elseif condition="isset($checkouttime) and !empty($checkouttime)" />
+                <p>
+                <xar:ml>
+                    <xar:mlstring>Updated: #(1)</xar:mlstring>
+                    <xar:mlvar>#xarLocaleFormatDate(' %d %b %y %H:%M', $checkouttime)#</xar:mlvar>
+                </xar:ml>
+                </p>
+            </xar:if>
+            <xar:if condition="!empty($hooks) and !empty($hooks['keywords'])">
+                #$hooks['keywords']#
+            </xar:if>
+            <xar:if condition="!empty($previous) and !empty($next)">
+            <p>#$pager#</p>
+            </xar:if>
+
+            <xar:if condition="!empty($hooks)">
+                <xar:foreach in="$hooks" key="$hookmodule">
+                <xar:comment>
+                    We already have dealt with changelog display
+                </xar:comment>
+                <xar:comment>Changed for check out check in functionality Article v1.5.4</xar:comment>
+                <xar:if condition="$hookmodule ne 'changelog'">
+                    #$hooks[$hookmodule]#
+                </xar:if>
+                </xar:foreach>
+            </xar:if>
+        </div>
+    </div>
+</div>

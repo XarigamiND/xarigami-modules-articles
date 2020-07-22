@@ -1,0 +1,138 @@
+<xar:base-include-javascript module="base" filename="toggle.js" position="body"/>
+<div class="xar-form-input-wrapper">
+    <label class="help xar-form-label" title="#xarML('Enter the number of items that you wish to display.')#" for="numitems_#$bid#">
+        <xar:mlstring>
+            Number of items
+        </xar:mlstring>
+    </label><input type="text" name="numitems" id="numitems_#$bid#" value="#$numitems#" size="5" maxlength="5" />
+</div>
+
+<div class="xar-form-input-wrapper-after">
+    <xar:if condition="empty($showonview)">
+        <input type="checkbox" name="showonview" id="showonview#$bid#" />
+        <xar:else />
+        <input type="checkbox" name="showonview" id="showonview#$bid#" checked="checked" />
+    </xar:if>
+    <label class="help" title="#xarML('Check this to have the block displayed on the article view.')#" for="showonview#$bid#">
+        <xar:mlstring>
+            Show on article view
+        </xar:mlstring>
+    </label>
+</div>
+
+<!--
+<div class="xar-form-input-wrapper-after">
+    <xar:if condition="empty($showondisplay)">
+        <input type="checkbox" name="showondisplay" id="showondisplay#$bid#" />
+        <xar:else />
+        <input type="checkbox" name="showondisplay" id="showondisplay#$bid#" checked="checked" />
+    </xar:if>
+    <label class="help" title="#xarML('Check this to have the block displayed on the article display.')#" for="showondisplay#$bid#">
+        <xar:mlstring>
+            Show on individual article display
+        </xar:mlstring>
+    </label>
+</div>
+-->
+
+<!--
+<div class="xar-form-input-wrapper-after">
+    <xar:if condition="empty($dynamictitle)">
+        <input type="checkbox" name="dynamictitle" id="dynamictitle#$bid#" />
+        <xar:else />
+        <input type="checkbox" name="dynamictitle" id="dynamictitle#$bid#" checked="checked" />
+    </xar:if>
+    <label class="help" title="#xarML('Check this to have the block title dynamically generated from the current content.')#" for="dynamictitle#$bid#">
+        <xar:mlstring>
+            Dynamic Block Title
+        </xar:mlstring>
+    </label>
+</div>
+
+<div class="xar-form-input-wrapper-after">
+    <xar:if condition="empty($showvalue)">
+        <input type="checkbox" name="showvalue" id="showvalue#$bid#" value="1" />
+        <xar:else />
+        <input type="checkbox" name="showvalue" id="showvalue#$bid#" value="1" checked="checked" />
+    </xar:if>
+    <label class="help" title="#xarML('Check this box to show the number of articles.')#" for="showvalue#$bid#">
+        <xar:mlstring>
+            Show number of articles
+        </xar:mlstring>
+    </label>
+</div>
+
+<div class="xar-form-input-wrapper-after">
+    <xar:if condition="empty($showpubtype)">
+        <input type="checkbox" name="showpubtype" id="showpubtype#$bid#" />
+        <xar:else />
+        <input type="checkbox" name="showpubtype" id="showpubtype#$bid#" checked="checked" />
+    </xar:if>
+    <label class="help" title="#xarML('Check this box to show pubtype related info.')#" for="showpubtype#$bid#">
+        <xar:mlstring>
+            Show pubtype information
+        </xar:mlstring>
+    </label>
+</div>
+
+<div class="xar-form-input-wrapper-after">
+    <xar:if condition="empty($showauthor)">
+        <input type="checkbox" name="showauthor" id="showauthor#$bid#" />
+        <xar:else />
+        <input type="checkbox" name="showauthor" id="showauthor#$bid#" checked="checked" />
+    </xar:if>
+    <label class="help" title="#xarML('Check this box to show the author info')#" for="showauthor#$bid#">
+        <xar:mlstring>
+            Show author information
+        </xar:mlstring>
+    </label>
+</div>
+-->
+
+<div class="xar-form-input-wrapper-after">
+<script language="JavaScript">
+//<![CDATA[
+ function showCategoriesClick(){
+         if( document.forms['modifyInstance'].elements['showcategories'].checked ){
+                 document.forms['modifyInstance'].elements['showkeywords'].disabled = false;
+         }else{
+                 document.forms['modifyInstance'].elements['showkeywords'].disabled = true;
+                 document.forms['modifyInstance'].elements['showkeywords'].checked = false;
+         }
+ }
+//]]>
+</script>
+    <xar:if condition="empty($showcategories)">
+
+<!--
+        <input type="checkbox" name="showcategories" id="showcategories#$bid#" onselect="return toggleDisplay('cattoggle#$bid#');" />
+        <xar:else />
+        <input type="checkbox" name="showcategories" id="showcategories#$bid#" checked="checked" onselect="return toggleDisplay('cattoggle#$bid#');" />
+-->
+        <input type="checkbox" name="showcategories" id="showcategories#$bid#" onclick="showCategoriesClick();" />
+        <xar:else />
+        <input type="checkbox" name="showcategories" id="showcategories#$bid#" checked="checked" onclick="showCategoriesClick();" />
+    </xar:if>
+    <label class="help" title="#xarML('Check this box to show category related info')#" for="showcategories#$bid#">
+        <xar:mlstring>
+            Show category information
+        </xar:mlstring>
+    </label>
+</div>
+
+<div class="xar-form-input-wrapper-after" id="cattoggle#$bid#">
+    <xar:if condition="empty($showkeywords) and !empty($showcategories)">
+        <input type="checkbox" name="showkeywords" id="showkeywords#$bid#" />
+    <xar:elseif condition="empty($showkeywords) and empty($showcategories)" />
+        <input type="checkbox" name="showkeywords" id="showkeywords#$bid#" disabled="disabled" />
+    <xar:else />
+        <input type="checkbox" name="showkeywords" id="showkeywords#$bid#" checked="checked" />
+    </xar:if>
+    <label class="help" title="#xarML('Check this box to group categories by their keywords')#" for="showkeywords#$bid#">
+        <xar:mlstring>
+            Show keywords hooked to categories
+        </xar:mlstring>
+    </label>
+</div>
+
+

@@ -1,0 +1,122 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:set name="homepage">xarServerGetBaseURL();</xar:set>
+<xar:set name="currenturl">xarServerGetCurrentURL();</xar:set>
+<xar:set name="homeurl">'<a href="'.$homepage.'">'.xarML('homepage').'</a>'</xar:set>
+<div class="xar-mod-page">
+    <div class="xar-mod-head">
+        <xar:template file="user-breadcrumb" type="module" module="base" />
+        <xar:template file="navtabs-user" type="module" />
+    </div>
+    <div class="xar-mod-body">
+        <xar:if condition="isset($displayarchived) and ($displayarchived eq TRUE)" >
+            <h1><strong><xar:mlstring>Title</xar:mlstring>:</strong>&#160;#$title#</h1>
+        <xar:else />
+           <h1><xar:mlstring> Archived</xar:mlstring>
+                <xar:template file="publinks" type="module" />
+            </h1>
+        </xar:if>
+        <div class="xar-mod-content">
+             <img src="#xarTplGetImage('add-files-to-archive.png','base')#" alt="#xarML('Archived Document')#" title="#xarML('Archived Document')#" class="xar-module-icon"/>
+
+             <xar:if condition="isset($displayarchived) and ($displayarchived eq TRUE)" >
+                <p><em><xar:mlstring>This article is archived and not accessible through the usual display pages.</xar:mlstring></em></p>
+                <xar:if condition="isset($author)">
+                <p><strong><xar:mlstring>Author</xar:mlstring>:</strong>&nbsp;#$author#</p>
+                </xar:if>
+                <xar:if condition="isset($pubdate)">
+                <p>
+                    <xar:ml>
+                        <xar:mlstring><strong>Date:</strong> #(1) #(2) or #(3)</xar:mlstring>
+                        <xar:mlvar>#xarLocaleGetFormattedDate('long',$pubdate)#</xar:mlvar>
+                        <xar:mlvar>#xarLocaleGetFormattedTime('long',$pubdate)#</xar:mlvar>
+                        <xar:mlvar>#xarLocaleFormatDate('%a, %d %B %Y %H:%M:%S %Z',$pubdate)#</xar:mlvar>
+                    </xar:ml>
+                </p>
+                </xar:if>
+                <xar:if condition="isset($summary)">
+                <p><strong><xar:mlstring>Summary</xar:mlstring>:</strong>&nbsp;#$summary#</p>
+                </xar:if>
+                <xar:if condition="isset($body)">
+                <p><strong><xar:mlstring>Body</xar:mlstring>:</strong>&nbsp;#$body#</p>
+                </xar:if>
+                <xar:if condition="isset($notes)">
+                <p><strong><xar:mlstring>Notes</xar:mlstring>:</strong>&nbsp;#$notes#</p>
+                </xar:if>
+               <xar:comment>
+                    Hooked DD now available for active, and display,view only DD props from V 1.7.0
+                    You can use the normal method of outputting hooked properties using the xar:data-output tag or
+                    use the articles method of #$fieldname_output# to place a hooked DD property
+                </xar:comment>
+                <xar:if condition="isset($properties) and count($properties) gt 0">
+                <xar:foreach in="$properties" key="$name">
+
+                <div class="xar-form-input-wrapper">
+                    <xar:data-label property="$properties[$name]" label="id" />
+                    <xar:data-output  property="$properties[$name]" value="$properties[$name]-&gt;value" />
+                </div>
+                </xar:foreach>
+                </xar:if>
+                <xar:comment>Changed for check out check in functionality Article v1.5.4</xar:comment>
+
+                <xar:if condition="!empty($hooks) and !empty($hooks['changelog'])">
+                    <p>#$hooks['changelog']#</p>
+                <xar:elseif condition="isset($checkouttime)" />
+                    <p>
+                    <xar:ml>
+                        <xar:mlstring>Updated: #(1)</xar:mlstring>
+                        <xar:mlvar>#xarLocaleFormatDate(' %d %b %y %H:%M', $checkouttime)#</xar:mlvar>
+                    </xar:ml>
+                    </p>
+                </xar:if>
+                <xar:if condition="!empty($hooks)">
+                    <xar:comment>We do not want some hooks on archived docs, you may want to lock comments</xar:comment>
+                    <xar:set name="unwantedhooks">array('ratings')</xar:set>
+                    <xar:foreach in="$hooks" key="$hookmodule">
+                    <xar:if condition="$hookmodule ne 'changelog' and !in_array($hookmodule,$unwantedhooks)">
+                        #$hooks[$hookmodule]#
+                    </xar:if>
+                    </xar:foreach>
+                </xar:if>
+            <xar:else />
+                <xar:categories-navigation layout="trails" showchildren="1" module="articles" itemtype="$ptid" itemid="$aid" cids="$cids" showcatcount="$showcatcount" showempty="0" />
+               <h2>#$title#</h2>
+                <p>
+                    <xar:mlstring>
+                        The article with this title has been stored in our document archives and is not accessible through the normal site display process.
+                    </xar:mlstring>
+                </p>
+                <xar:if condition="isset($testaccess) AND $testaccess">
+                    <p class="xar-padding-thicktop">
+                        <xar:mlstring>You currently have access to our archived documents and can access this article at</xar:mlstring>
+                        <a href="#xarModURL('articles','user','displayarchived',array('ptid'=>$ptid,'aid'=>$aid))#">the archive display page</a>
+
+                    </p>
+                <xar:else />
+                     <p class="xar-padding-thicktop">
+                        <xar:mlstring>You might like to try browsing the current categories for a similar article or </xar:mlstring>
+
+                        <xar:if condition="xarModIsAvailable('search')">
+                            <xar:mlstring>use the search box below to try and find another article.</xar:mlstring>
+                             <br /><xar:block module="search" type="search" />
+                        <xar:else />
+                         <xar:mlstring>use your browser back button to return to your previous page.</xar:mlstring>
+
+                        </xar:if>
+                    </p>
+
+                    <xar:set name="adminemail">xarModGetVar('mail','adminmail')</xar:set>
+                    <xar:set name="obfuemail">xarModAPIFunc('mail','user','obfuemail',array('email'=>$adminemail,'text'=>xarML('contact the Site Administrator')))</xar:set>
+
+                    <p class="xar-padding-thicktop">
+                        <xar:ml>
+                            <xar:mlstring>If you believe you need to access this article, and do not have access to our site archives,
+                            then please  #(1) with the article title and URL. The URL is added below for reference.</xar:mlstring>
+                            <xar:mlvar>#$obfuemail.link#</xar:mlvar>
+                        </xar:ml>
+                    </p>
+                    <p class="xar-error">#$currenturl#</p>
+                </xar:if>
+             </xar:if>
+        </div>
+    </div>
+</div>

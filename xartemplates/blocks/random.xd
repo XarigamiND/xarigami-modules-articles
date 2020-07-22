@@ -1,0 +1,34 @@
+<xar:if condition="!empty($altsummary)">
+        #$altsummary#
+</xar:if>
+
+<xar:foreach in="$items" value="$item">
+    <xar:if condition="!empty($showtitle)">
+        <xar:if condition="isset($linkpubtype)">
+            <a href="#xarModURL('articles', 'user', 'display', array('aid' => $item['aid'], 'itemtype' => $item['pubtypeid']))#">#$item['title']#</a>
+        <xar:else />
+            <a href="#xarModURL('articles', 'user', 'display', array('aid' => $item['aid']))#">#$item['title']#</a>
+        </xar:if>
+    </xar:if>
+    <xar:if condition="!empty($showsummary) and !empty($item['summary'])">
+            #$item['summary']#
+    </xar:if>
+    <xar:if condition="!empty($showauthor)">
+        <p>
+            #$item['authorname']#
+        </p>
+    </xar:if>
+    <xar:if condition="!empty($showpubdate)">
+        <p class="xar-sub">
+            #xarLocaleGetFormattedDate('medium',$item['pubdate'])#
+        </p>
+    </xar:if>
+</xar:foreach>
+
+<xar:if condition="!empty($showsubmit)">
+    <div>
+        <a href="#xarModURL('articles', 'admin', 'new', array('ptid' => $pubtypeid))#"><xar:mlstring>Submit new</xar:mlstring></a>
+    </div>
+</xar:if>
+
+<xar:comment> DD are configurable in block configuration</xar:comment>

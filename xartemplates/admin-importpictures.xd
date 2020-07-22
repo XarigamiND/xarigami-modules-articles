@@ -1,0 +1,201 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:base-include-javascript libname="jquery" libfile="jquery.min" position="body"/>
+<xar:set name="importpicturescode">"
+jQuery(document).ready(function(){
+    jQuery('form#importpictures select#ptid').change(function() { this.form.submit(); });
+
+});
+"</xar:set>
+<xar:base-include-javascript type="code" code="$importpicturescode" position="body"/>
+<div class="xar-mod-page">
+    <div class="xar-mod-head">
+        <xar:if condition="!xarRequestIsAJAX()">
+          <xar:template type="module"  module="base" file="admin-menu" />
+        </xar:if>
+    </div>
+    <div class="xar-mod-body">
+        <h1>
+            <xar:mlstring>Utilities</xar:mlstring>
+        </h1>
+        <xar:template type="module" file="util-menu" />
+        <div class="xar-mod-content">
+            <h2>
+                <xar:mlstring>Import pictures</xar:mlstring>
+            </h2>
+            <xar:if condition="!empty($logfile)">
+                <div class="xar-norm-outline xar-padding-thick" style="overflow-x: scroll;">
+                    #$logfile#
+                </div>
+            </xar:if>
+            <p>
+                <xar:mlstring>Create a simple picture gallery based on images and thumbnails located on your server.</xar:mlstring>
+            </p>
+            <form method="post" id="importpictures" action="#xarModURL('articles','admin','importpictures')#">
+                <fieldset>
+                    <legend><xar:mlstring>Image selection options</xar:mlstring></legend>
+                    <div class="xar-form-input-wrapper">
+                        <label for="basedir" class="xar-form-label">
+                            <xar:mlstring>Base Directory:</xar:mlstring>
+                        </label>
+                        <input type="text" name="basedir" id="basedir" value="#$basedir#" size="50" maxlength="250" />
+                        <input type="submit" name="refresh" id="refresh" value="#xarML('Refresh')#" />
+                    </div>
+                    <div class="xar-form-input-wrapper">
+                        <label for="baseurl" class="xar-form-label">
+                            <xar:mlstring>Base URL:</xar:mlstring>
+                        </label>
+                        <input type="text" name="baseurl" id="baseurl" value="#$baseurl#" size="50" maxlength="250" />
+                    </div>
+                    <div class="xar-form-input-wrapper">
+                        <label for="thumbnail" class="xar-form-label">
+                            <xar:mlstring>Thumbnail Prefix:</xar:mlstring>
+                        </label>
+                        <input type="text" name="thumbnail" id="thumbnail" value="#$thumbnail#" size="10" maxlength="50" />
+                    </div>
+                    <div class="xar-form-input-wrapper">
+                        <label for="picture_filelist" class="xar-form-label">
+                            <xar:mlstring>Available Pictures:</xar:mlstring>
+                        </label>
+                        <xar:if condition="count($filelist) eq 0">
+                            <xar:mlstring>No pictures found at specified location</xar:mlstring>
+                            <input type="hidden" name="filelist[]" id="picture_filelist" />
+                        <xar:else />
+                            <select name="filelist[]" id="picture_filelist" multiple="multiple">
+                                <option value=""></option>
+                                <xar:foreach in="$filelist" value="$file">
+                                    <xar:if condition="!empty($thumblist[$file])">
+                                        <xar:set name="thumb">#$thumblist[$file]#</xar:set>
+                                    <xar:else />
+                                        <xar:set name="thumb">'-'</xar:set>
+                                    </xar:if>
+                                    <xar:if condition="!empty($selected[$file])">
+                                        <option value="#$file#" selected="selected">#$file# [#$thumb#]</option>
+                                    <xar:else />
+                                        <option value="#$file#">#$file# [#$thumb#]</option>
+                                    </xar:if>
+                                </xar:foreach>
+                            </select>
+                        </xar:if>
+                    </div>
+                </fieldset>
+                <xar:if condition="count($fields) gt 0">
+                    <fieldset>
+                        <legend>Publication type field mapping</legend>
+                        <div class="xar-form-input-wrapper">
+                            <label for="ptid" class="xar-form-label">
+                                <xar:mlstring>Publication Type:</xar:mlstring>
+                            </label>
+                            <select name="ptid" id="ptid">
+                                <option value=""></option>
+                                <xar:foreach in="$pubtypes" key="$pubid" value="$pubtype">
+                                    <xar:if condition="!empty($ptid) and $pubid eq $ptid">
+                                        <option value="#$pubid#" selected="selected">#$pubtype['descr']#</option>
+                                        <xar:else />
+                                        <option value="#$pubid#">#$pubtype['descr']#</option>
+                                    </xar:if>
+                                </xar:foreach>
+                            </select>
+                        </div>
+
+                        <div class="xar-form-input-wrapper">
+                            <label for="title" class="xar-form-label">
+                                <xar:mlstring>Insert Picture Name into Field:</xar:mlstring>
+                            </label>
+                            <select name="title" id="title">
+                                <option value=""></option>
+                                <xar:foreach in="$fields" key="$field" value="$label">
+                                    <xar:if condition="!empty($title) and $title eq $field">
+                                        <option value="#$field#" selected="selected">#$label#</option>
+                                    <xar:else />
+                                        <option value="#$field#">#$label#</option>
+                                    </xar:if>
+                                </xar:foreach>
+                            </select>
+                        </div>
+                        <div class="xar-form-input-wrapper">
+                            <label for="content" class="xar-form-label">
+                                <xar:mlstring>Insert Picture URL into Field:</xar:mlstring>
+                            </label>
+                            <select name="content" id="content">
+                                <option value=""></option>
+                                <xar:foreach in="$fields" key="$field" value="$label">
+                                    <xar:if condition="!empty($content) and $content eq $field">
+                                        <option value="#$field#" selected="selected">#$label#</option>
+                                    <xar:else />
+                                        <option value="#$field#">#$label#</option>
+                                    </xar:if>
+                                </xar:foreach>
+                            </select>
+                        </div>
+                        <div class="xar-form-input-wrapper">
+                            <label for="summary" class="xar-form-label">
+                                <xar:mlstring>Insert Thumbnail URL into Field:</xar:mlstring>
+                            </label>
+                            <select name="summary" id="summary">
+                                <option value=""></option>
+                                <xar:foreach in="$fields" key="$field" value="$label">
+                                    <xar:if condition="!empty($summary) and $summary eq $field">
+                                        <option value="#$field#" selected="selected">#$label#</option>
+                                    <xar:else />
+                                        <option value="#$field#">#$label#</option>
+                                    </xar:if>
+                                </xar:foreach>
+                            </select>
+                        </div>
+                    </fieldset>
+                </xar:if>
+
+                <fieldset>
+                    <legend><xar:mlstring>Field options</xar:mlstring></legend>
+                    <div class="xar-form-input-wrapper">
+                        <label for="pubdatesource" class="xar-form-label">
+                            <xar:mlstring>Publication Date calculated on:</xar:mlstring>
+                        </label>
+                        <xar:data-input type="dropdown" name="pubdatesource" id="pubdatesource" options="$pubdatesourcelist" value="$pubdatesource" />
+                    </div>
+                    <div class="xar-form-input-wrapper">
+                        <label for="sortby" class="xar-form-label">
+                               <xar:mlstring>Sort by:</xar:mlstring>
+                        </label>
+                        <xar:data-input type="dropdown" name="sortby" id="sortby" options="$sortbylist" value="$sortby" />
+                    </div>
+                    <div class="xar-form-input-wrapper">
+                        <label for="sortorder" class="xar-form-label">
+                            <xar:mlstring>Sort order:</xar:mlstring>
+                        </label>
+                        <xar:data-input type="radio" name="sortorder" id="sortorder" options="$sortorderlist" value="$sortorder" />
+                    </div>
+
+                    <xar:if condition="count($cats) gt 0">
+                        <div class="xar-form-input-wrapper">
+                            <label for="FOR" title="#xarML('TITLE')#" class="xar-form-label">
+                                <xar:mlstring>Initial Categories:</xar:mlstring>
+                            </label>
+                            <xar:foreach in="$cats" key="$catid">#$cats[$catid]#</xar:foreach>
+                        </div>
+                    </xar:if>
+
+                </fieldset>
+
+                <div class="xar-form-footer">
+                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                    <input type="submit" name="test" id="test" value="#xarML('Test Import')#" class="xar-margin-thickright" />
+                    <input type="submit" name="import" id="import" value="#xarML('Import Pictures')#" class="xar-margin-thickleft" />
+                </div>
+            </form>
+             <p>
+                <xar:mlstring>Note : for more advanced upload and import features, look at the Uploads and Images modules.</xar:mlstring>
+            </p>
+            <xar:if condition="!empty($preview)">
+                <h3>
+                    <xar:mlstring>Preview of the first picture</xar:mlstring>
+                </h3>
+                <hr />
+                <div class="xar-fullwidth">
+                    #$preview#
+                </div>
+                <hr />
+            </xar:if>
+        </div>
+    </div>
+</div>

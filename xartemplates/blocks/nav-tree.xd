@@ -1,0 +1,67 @@
+<xar:if condition="isset($catimage) and !empty($catimage)">
+  <img src="$catimage" />
+</xar:if>
+<xar:if condition="isset($cattrees) and is_array($cattrees)">
+<ul class="xar-menu-section">
+<xar:foreach in="$cattrees" value="$cattree">
+    <xar:if condition="isset($cattree['items']) and is_array($cattree['items']) and sizeof($cattree['items']) gt 0">
+    <xar:foreach in="$cattree['items']" key="$pubtypeName" value="$items">
+    <li class="xar-menu-section">
+    <h4>#$pubtypeName#</h4>
+    <ul class="xar-menu-item">
+    <xar:foreach in="$items" value="$item">
+        <li class="#$item['class']#">
+        <xar:if condition="empty($item['link'])">
+            #$item['label']#
+        <xar:else />
+            <a href="#$item['link']#">#$item['label']#</a>
+        </xar:if>
+        </li>
+    </xar:foreach>
+    </ul>
+    </li>
+    </xar:foreach>
+    </xar:if>
+
+
+    <xar:if condition="isset($cattree['catitems']) and is_array($cattree['catitems']) and sizeof($cattree['catitems']) gt 0">
+    <li class="xar-menu-section">
+    <h4>Sections</h4>
+    <ul class="xar-menu-item">
+    <xar:foreach in="$cattree['catitems']" value="$catitem">
+        <li class="xar-menu-item">
+        <xar:if condition="empty($catitem['catlink'])">
+            #$catitem['catlabel']#
+        <xar:else />
+            <a href="#$catitem['catlink']#">#$catitem['catlabel']#</a>
+        </xar:if>
+        <xar:if condition="!empty($catitem['catcount'])">
+            (#$catitem['catcount']#)
+        </xar:if>
+        </li>
+
+        <xar:if condition="!empty($catitem['catchildren']) and count($catitem['catchildren']) gt 0">
+        <ul class="xar-menu-subitem">
+        <xar:foreach in="$catitem['catchildren']" value="$catchild">
+            <li class="xar-menu-subitem">
+            <xar:if condition="empty($catchild['clink'])">
+                #$catchild['clabel']#
+            <xar:else />
+                <a href="#$catchild['clink']#">#$catchild['clabel']#</a>
+            </xar:if>
+            <xar:if condition="!empty($catchild['ccount'])">
+                (#$catchild['ccount']#)
+            </xar:if>
+            </li>
+        </xar:foreach>
+        </ul>
+        </xar:if>
+
+    </xar:foreach>
+    </ul>
+    </li>
+    </xar:if>
+
+</xar:foreach>
+</ul>
+</xar:if>

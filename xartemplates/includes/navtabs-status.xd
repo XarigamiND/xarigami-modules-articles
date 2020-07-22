@@ -1,0 +1,25 @@
+<xar:style scope="module" module="base" file="tabs" />
+<xar:if condition="count($statusfilters) gt 0">
+    <ul class="xar-tabs xar-clearboth">
+        <li class="xar-tabs-label" title="#xarML('Click on a tab to display articles from that publication type')#">
+            <xar:mlstring>
+                Status:
+            </xar:mlstring>
+        </li>
+        <xar:foreach in="$statusfilters" value="$statusfilter">
+            <xar:if condition="empty($statusfilter['slink'])">
+                <li class="xar-tab-active">
+                    <a href="#xarServerGetCurrentURL()#" title="#$statusfilter['stitle']#" >
+                        #$statusfilter['stitle']#
+                    </a>
+                </li>
+            <xar:else />
+                <li class="xar-tab">
+                    <a href="#$statusfilter['slink']#" title="#$statusfilter['stitle']#">
+                        #$statusfilter['stitle']#
+                    </a>
+                </li>
+            </xar:if>
+        </xar:foreach>
+    </ul>
+</xar:if>

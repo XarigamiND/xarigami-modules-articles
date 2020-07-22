@@ -1,0 +1,38 @@
+<xar:if condition="isset($sort) and ($sort eq 'title')">
+    <xar:comment>Added to automatically display an alpha pager when articles are sorted by title.</xar:comment>
+    <xar:style scope="module" module="articles" file="alphapager" />
+    <div class="alphapager-wrapper">
+        <xar:foreach in="$alphapager" value="$alphapage" key="$curletter">   
+            <xar:if condition="!empty($letter) and ($letter eq $curletter) and ($curletter ne 'all') or (empty($letter) and $curletter eq 'all')">
+                <span>#$alphapage['caption']#</span>
+            <xar:else />
+                <xar:if condition="$curletter eq 'all'">
+                    <xar:set name="pagetooltip">
+                        <xar:ml>
+                            <xar:mlstring>Display all items without any filtering : #(1) item(s)</xar:mlstring>
+                            <xar:mlvar>#$alphapage['count']#</xar:mlvar>
+                        </xar:ml>
+                    </xar:set>
+                <xar:elseif condition = "$curletter eq 'other'" />
+                    <xar:set name="pagetooltip">
+                        <xar:ml>
+                            <xar:mlstring>Display other items (not starting with alphabetical characters) : #(1) item(s)</xar:mlstring>
+                            <xar:mlvar>#$alphapage['count']#</xar:mlvar>
+                        </xar:ml>
+                    </xar:set>
+                <xar:else />
+                    <xar:set name="pagetooltip">
+                        <xar:ml>
+                            <xar:mlstring>Display items starting with #(1) : #(2) item(s)</xar:mlstring>
+                            <xar:mlvar>#$alphapage['caption']#</xar:mlvar>
+                            <xar:mlvar>#$alphapage['count']#</xar:mlvar>
+                        </xar:ml>
+                    </xar:set>
+                </xar:if>
+                <a href="#$alphapage['link']#" title="#$pagetooltip#">#$alphapage['caption']#</a>
+            </xar:if>
+    
+        </xar:foreach>
+    </div>
+    
+</xar:if>

@@ -1,0 +1,13 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:if condition="isset($sectiontitles) and count($sectiontitles) gt 0">
+<xar:style scope="module" module="base" file="tabs" />
+<ul  class="xar-tabs xar-clearboth">
+<xar:loop name="$sectiontitles">
+    <xar:if condition="$tab eq $loop:index+1">
+        <li class="xar-tab-active"><a href="#xarServergetCurrentURL(array('tab'=&gt;$loop:index+1))#"><span>#$loop:item#</span></a></li>
+    <xar:else />
+        <li class="xar-tab"><a href="#xarServergetCurrentURL(array('tab'=&gt;$loop:index+1))#"><span>#$loop:item#</span></a></li>
+    </xar:if>
+</xar:loop>
+</ul>
+</xar:if>

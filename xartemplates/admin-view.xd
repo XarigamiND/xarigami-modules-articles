@@ -1,0 +1,260 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:base-include-javascript libname="jquery" libfile="jquery.min" plugin="ui" pluginfile="ui.core.min,ui.dialog.min" style="ui.css" position="body"/>
+<xar:template type="module" module="articles" file="jq-articles-view" />
+<xar:set name="viewtitle"><xar:mlstring>View</xar:mlstring></xar:set>
+<xar:set name="edittitle"><xar:mlstring>Edit</xar:mlstring></xar:set>
+<xar:set name="deletetitle"><xar:mlstring>Delete</xar:mlstring></xar:set>
+<xar:set name="clonetitle"><xar:mlstring>Clone</xar:mlstring></xar:set>
+<div class="xar-mod-page">
+    <div class="xar-mod-head">
+        <xar:if condition="!xarRequestIsAJAX()">
+        <xar:template type="module" module="base" file="admin-menu" />
+        </xar:if>
+    </div>
+    <div class="xar-mod-body">
+        <h1 class="xar-floatleft">
+                <xar:set name="pub">(isset($ptid) and !empty($ptid))?$publist[$ptid]:xarML('All Articles');</xar:set>
+                <xar:ml>
+                    <xar:mlstring>Manage #(1) list</xar:mlstring>
+                    <xar:mlvar>#$pub#</xar:mlvar>
+                </xar:ml>
+            </h1>
+        <div class="xar-align-right">
+            <form  method="post" id="pubtypelist" action="#xarModURL('articles','admin','view')#">
+                 <div>
+                    <xar:data-input type="dropdown" name="ptidselect" id="ptidselect" options="$publist" value="$ptid" />
+                    <input type="submit" value="#xarML('Select Publication')#" />
+                 </div>
+            </form>
+         </div>
+        <div class="xar-mod-content">
+            <xar:template file="navtabs-status" type="module" />
+            <xar:comment>
+                You can use different admin-view-[pubtype].xd templates for different pubtypes
+            </xar:comment>
+                <xar:if condition="!empty($authorid) or !empty($language) or !empty($pubdate)">
+                    <h3>
+                    <xar:if condition="!empty($pubdate)">
+                        <xar:ml>
+                            <xar:mlstring>Publication Date : #(1)</xar:mlstring>
+                            <xar:mlvar>#$pubdate#</xar:mlvar>
+                        </xar:ml>
+                    </xar:if>
+                    <xar:if condition="!empty($authorid)">
+                        <xar:ml>
+                            <xar:mlstring>By Author : #(1)</xar:mlstring>
+                            <xar:mlvar>#xarUserGetVar('name',$authorid)#</xar:mlvar>
+                        </xar:ml>
+                    </xar:if>
+                    <xar:if condition="!empty($language)">
+                        <xar:ml>
+                            <xar:mlstring>Language : #(1)</xar:mlstring>
+                            <xar:mlvar>#$language#</xar:mlvar>
+                        </xar:ml>
+                    </xar:if>
+                    </h3>
+                </xar:if>
+                <xar:categories-navigation layout="trails" showchildren="1" module="articles" type="admin" itemtype="$ptid" catid="$catid" />
+                <p class="xar-align-right xar-floatright">
+                    <a class="esprite xs-document-new xar-displayinline" href="#$newurl#"><xar:mlstring>&#160;Add article</xar:mlstring></a>
+                </p>
+                <form method="post" id="viewarticles" class="xar-clearboth" action="#xarModURL('articles','admin','updatestatus')#">
+                     <table class="xar-items">
+                        <tr>
+                            <th style="min-width:33%;">
+                                <xar:set name="sortlabel">xarML("Sort by Title #(1)", strtoupper($dorder))</xar:set>
+                                <a href="#xarModURL('articles','admin','view',array('order'=>$dorder,'sort'=>'title','ptid'=>$ptid))#" title="#$sortlabel#">
+                                    #$labels['title']#
+                                </a>
+                                <xar:if condition="$orderimage['title']">
+                                    <span class="#$orderimgclass#" title="#$orderimglabel#">&#160;<span>#$orderimglabel#</span></span>
+                                </xar:if>
+                            </th>
+                            <xar:if condition="$showdate">
+                                <xar:set name="sortlabel">xarML("Sort by Publication Date #(1)", strtoupper($dorder))</xar:set>
+                                <th>
+                                    <a href="#xarModURL('articles','admin','view',array('order'=>$dorder,'sort'=>'pubdate','ptid'=>$ptid))#" title="#$sortlabel#">
+                                        #$labels['pubdate']#
+                                    </a>
+                                    <xar:if condition="$orderimage['pubdate']">
+                                        <span class="#$orderimgclass#" title="#$orderimglabel#">&#160;<span>#$orderimglabel#</span></span>
+                                    </xar:if>
+                                </th>
+
+                            </xar:if>
+                            <xar:if condition="$showstatus">
+                                <xar:set name="sortlabel">xarML("Sort by Status #(1)", strtoupper($dorder))</xar:set>
+                                <th colspan="2">
+                                    <a href="#xarModURL('articles','admin','view',array('order'=>$dorder,'sort'=>'status','ptid'=>$ptid))#" title="#$sortlabel#">
+                                        #$labels['status']#
+                                    </a>
+                                    <xar:if condition="$orderimage['status']">
+                                        <span class="#$orderimgclass#" title="#$orderimglabel#">&#160;<span>#$orderimglabel#</span></span>
+                                    </xar:if>
+                                </th>
+                            </xar:if>
+                            <xar:comment>Added for check out check in functionality Article v1.5.4</xar:comment>
+                            <xar:if condition="$usecheckoutin eq '1'">
+                                <th class="xar-align-center">
+                                    <xar:mlstring>Checked out</xar:mlstring>
+                                </th>
+                            </xar:if>
+                            <xar:comment>End - added for check out check in functionality Article v1.5.4</xar:comment>
+                            <th>
+                                <xar:mlstring>Options</xar:mlstring>
+                            </th>
+                        </tr>
+                        <xar:set name="rowclass">'xar-norm'</xar:set>
+                        <xar:foreach in="$items" value="$item">
+                            <tr class="#$rowclass#">
+                                <td>#$item['title']#</td>
+                                <xar:if condition="$showdate">
+                                    <td>
+                                        #xarLocaleFormatDate('%x %X',$item['pubdate'])#
+                                    </td>
+                                </xar:if>
+                                <xar:comment>next lines changed for check out check in functionality Article v1.5.4</xar:comment>
+                                <xar:if condition="$showstatus">
+                                    <td>
+                                        <label for="aids[#$item['aid']#]">
+                                            #$item['status']#
+                                        </label>
+                                    </td>
+                                </xar:if>
+                                <xar:if condition="($showstatus and !empty($item['viewurl']))">
+                                    <td >
+                                        <xar:if condition="$canmod">
+                                            <input type="checkbox" name="aids[#$item['aid']#]" id="aids[#$item['aid']#]" value="1" class="status-#$item['numericstatus']#" #$item['selected']# />
+                                        </xar:if>
+                                    </td>
+                                </xar:if>
+                                <xar:comment>Added for check out check in functionality Article v1.5.4</xar:comment>
+
+                                <xar:if condition="$usecheckoutin eq '1'">
+                                    <xar:if condition="$item['checkout'] eq '1'">
+                                        <td class="xar-sub">
+                                            <xar:if condition="!$showstatus">
+                                                <input type="checkbox" name="aids[#$item['aid']#]" id="aids[#$item['aid']#]" value="1" #$item['selected']# />
+                                            </xar:if>
+                                            <img src="#xarTplGetImage('locked.gif','articles')#" title="#xarML('Checked out and not editable')#" alt="#xarML('Checked out and Locked')#" />
+                                            <xar:ml>
+                                                <xar:mlstring>#(1) by #(2)</xar:mlstring>
+                                                <xar:mlvar>#xarLocaleFormatDate('%x %X',$item['checkouttime'])#</xar:mlvar>
+                                                <xar:mlvar>#xarUserGetVar('name',$item['editor'])#</xar:mlvar>
+                                            </xar:ml>
+                                        </td>
+                                    <xar:else />
+                                        <td class="xar-sub">
+                                            <img src="#xarTplGetImage('unlocked.gif','articles')#" title="#xarML('Checked In and editable')#" alt="#xarML('Checked In and Unlocked')#" />
+                                        </td>
+                                    </xar:if>
+                                </xar:if>
+                                <xar:comment>End - Added for check out check in functionality Article v1.5.4</xar:comment>
+
+                                <td class="xar-item-actions">
+
+                                    <xar:if condition="empty($item['viewurl'])">
+                                        <p class="esprite xs-display xar-icon-disabled xar-displayinline" title ="#$item['viewtitle']#"><span>#$item['viewtitle']#</span></p>
+                                    <xar:else />
+                                        <a href="#$item['viewurl']#" title="#$item['viewtitle']#" class="esprite xs-display"><span>#$item['viewtitle']#</span></a>
+                                    </xar:if>
+                                    &#160;
+                                    <xar:if condition="empty($item['editurl'])">
+                                        <p class="esprite xs-modify xar-icon-disabled xar-displayinline" title ="#$item['edittitle']#" ><span>#$item['edittitle']#</span></p>
+                                    <xar:else />
+                                        <a href="#$item['editurl']#" title="#$item['edittitle']#" class="esprite xs-modify" ><span>#$item['edittitle']#</span></a>
+                                    </xar:if>
+                                    &#160;
+                                     <xar:if condition="empty($item['cloneurl'])">
+                                        <p class="esprite  xs-edit-duplicate xar-icon-disabled xar-displayinline" title ="#$item['clonetitle']#" ><span>#$item['clonetitle']#</span></p>
+                                    <xar:else />
+                                        <a href="#$item['cloneurl']#" title="#$item['clonetitle']#" class="esprite xs-edit-duplicate" ><span>#$item['clonetitle']#</span></a>
+                                    </xar:if>
+                                    &#160;
+                                    <xar:if condition="empty($item['deleteurl'])">
+                                        <p class="esprite xs-delete xar-icon-disabled xar-displayinline" title ="#$item['deletetitle']#" ><span>#$item['deletetitle']#</span></p>
+                                    <xar:else />
+                                        <a href="#$item['deleteurl']#" title="#$item['deletetitle']#" id="delete_#$item.aid#"  class="esprite xs-delete"><span>#$item['deletetitle']#</span></a>
+                                    </xar:if>
+
+                                </td>
+                            </tr>
+                             <xar:set name="rowclass">$rowclass == 'xar-norm' ? 'xar-alt' : 'xar-norm'</xar:set>
+
+                        </xar:foreach>
+                    </table>
+                    <xar:if condition="count($items) le 0">
+                        <div class="xar-align-center xar-padding-thick">
+                            <xar:mlstring>No articles available.</xar:mlstring>
+                        </div>
+                    </xar:if>
+                    <xar:comment>This section changed for check out check in functionality Article v1.5.4</xar:comment>
+                    <xar:if condition="(!empty($showstatus) or $usecheckoutin eq 1) and count($items) gt 0 and $canmod">
+                        <p id="checkcontrols" class="xar-sub xar-padding-thick"></p>
+                        <div class="xar-fullwidth">
+                            <label for="status">
+                                <xar:mlstring>
+                                    Change checked article status to
+                                </xar:mlstring>
+                                :</label>&#160;
+                            <select name="status" id="status">
+                                <xar:if condition="!empty($showstatus) ">
+                                    <xar:if condition="xarSecurityCheck('DeleteArticles',0,'Article',$ptid.':All:All:All')">
+                                        <option value="-1">
+                                            <xar:mlstring>
+                                                [Delete All]
+                                            </xar:mlstring>
+                                        </option>
+                                    </xar:if>
+                                    <xar:foreach in="$states" key="$id" value="$name">
+                                        <xar:if condition="$id eq 2">
+                                            <xar:comment>Approved</xar:comment>
+                                            <option value="#$id#" selected="selected">
+                                                #$name#
+                                            </option>
+                                        <xar:elseif condition="$id eq 3"/>
+                                            <xar:comment>Frontpage</xar:comment>
+                                            <xar:if condition="xarModGetVar('articles','defaultpubtype') eq $ptid or xarModGetVar('articles','defaultpubtype') eq ''">
+                                                <option value="#$id#">
+                                                    #$name#
+                                                </option>
+                                            </xar:if>
+                                        <xar:else/>
+                                            <option value="#$id#">
+                                                #$name#
+                                            </option>
+                                        </xar:if>
+                                    </xar:foreach>
+                                </xar:if>
+
+                                <xar:comment>Added for check out check in functionality Article v1.5.4</xar:comment>
+                                <xar:if condition="$usecheckoutin and xarSecurityCheck('ModerateArticles',0,'Article',$ptid.':All:All:All')">
+                                    <option value="-2">
+                                          <xar:mlstring>[Check In]</xar:mlstring>
+                                    </option>
+                                    <option value="-3">
+                                          <xar:mlstring>[Check Out (Lock)]</xar:mlstring>
+                                    </option>
+                                </xar:if>
+                                <xar:comment>End section - of Changes and Addidions for check out check in functionality Article v1.5.4</xar:comment>
+                            </select>
+
+                            <input type="hidden" name="ptid" id="ptid" value="#$ptid#" />
+                            <input type="hidden" name="catid" id="catid" value="#$catid#" />
+                            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
+                            <input type="submit" value="#$changestatuslabel#" />
+                        </div>
+                    </xar:if>
+                    <div class="xar-align-right xar-padding-thicktops">
+                        #$pager#
+                    </div>
+                </form>
+                <div class="xar-form-footer">
+                        <p class="esprite xs-display xar-displayinline">&#160;  #$viewtitle#&#160;</p>
+                        <p class="esprite xs-modify xar-displayinline">&#160;  #$edittitle#&#160;</p>
+                        <p class="esprite xs-delete xar-displayinline">&#160;  #$deletetitle#&#160;</p>
+                        <p class="esprite xs-edit-duplicate xar-displayinline">&#160;  #$clonetitle#&#160;</p>
+                </div>
+        </div>
+    </div>
+</div>

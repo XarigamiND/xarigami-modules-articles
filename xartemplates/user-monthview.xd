@@ -1,0 +1,102 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<div class="xar-mod-page">
+    <div class="xar-mod-head">
+        <xar:if condition="xarModGetVar('themes','showusermodheader')">
+        <div class="xar-mod-title"><xar:mlstring>Articles by Month</xar:mlstring></div>
+        </xar:if>
+        <xar:template file="user-breadcrumb" type="module" />
+        <xar:template file="navtabs-user" type="module" />
+    </div>
+    <div class="xar-mod-body">
+        <h1>
+            <xar:mlstring>
+                Articles by Month
+            </xar:mlstring>
+         </h1>
+         <h2>
+            <xar:template file="publinks" type="module" />
+         </h2>
+        <div class="xar-mod-content">
+            <xar:comment>
+                You can use different user-monthview-[pubtype].xd templates for different pubtypes
+            </xar:comment>
+            <ul>
+                <xar:foreach in="$months" value="$month">
+                    <li>
+                        <xar:if condition="empty($month['mlink'])">
+                            <strong> #$month['month']# (#$month['mcount']#) </strong>
+                            <xar:else />
+                            <a href="#$month['mlink']#"> #$month['month']# </a> (#$month['mcount']#)
+                        </xar:if>
+                    </li>
+                </xar:foreach>
+            </ul>
+            <form method="post" action="#$curlink#">
+                <table>
+                    <tr>
+                        <xar:foreach in="$catsel" value="$sel">
+                            <td>
+                                #$sel#
+                            </td>
+                        </xar:foreach>
+                    </tr>
+                </table>
+            </form>
+            <table class="xar-items">
+                <tr>
+                    <xar:foreach in="$catlist" value="$cat">
+                        <xar:if condition="empty($cat['link'])">
+                            <th class="xar-align-center">
+                                #$cat['name']#
+                            </th>
+                            <xar:else />
+                            <th class="xar-align-center">
+                                <a href="#$cat['link']#"> #$cat['name']# </a>
+                            </th>
+                        </xar:if>
+                    </xar:foreach>
+                </tr>
+        <!-- TODO: make sure xar-alt is the right class to use here -->
+                <xar:set name="$i">
+                    1
+                </xar:set>
+                <xar:foreach in="$articles" value="$article">
+                    <xar:if condition="$i++ and $i % 2 eq 0">
+                        <tr class="xar-accent">
+                            <xar:foreach in="$article['cats']" value="$cat">
+                                <td>
+                                    #$cat['list']#
+                                </td>
+                            </xar:foreach>
+                            <td>
+                                <a href="#$article['link']#"> #$article['title']# </a>
+                            </td>
+                            <xar:if condition="!empty($showdate)">
+                                <td>
+                                    #xarLocaleFormatDate("%Y-%m-%d %H:%M:%S",$article['pubdate'])#
+                                </td>
+                            </xar:if>
+                        </tr>
+                        <xar:else />
+                        <tr>
+                            <xar:foreach in="$article['cats']" value="$cat">
+                                <td>
+                                    #$cat['list']#
+                                </td>
+                            </xar:foreach>
+                            <td>
+                                <a href="#$article['link']#"> #$article['title']# </a>
+                            </td>
+                            <xar:if condition="!empty($showdate)">
+                                <td>
+                                    #xarLocaleFormatDate("%Y-%m-%d %H:%M:%S",$article['pubdate'])#
+                                </td>
+                            </xar:if>
+                        </tr>
+                    </xar:if>
+                </xar:foreach>
+            </table>
+        </div>
+
+    </div>
+</div>

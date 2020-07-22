@@ -1,0 +1,121 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<div class="xar-mod-page">
+    <div class="xar-mod-head">
+        <xar:template type="module" module="articles" file="user-menu" />
+    </div>
+    <div class="xar-mod-body">
+        <xar:if condition="!empty($ptid) or !empty($catid)">
+            <xar:categories-navigation layout="trails" showchildren="1" module="articles" itemtype="$ptid" catid="$catid" showcatcount="$showcatcount" showempty="1" />
+        </xar:if>
+        <div class="xar-mod-content">
+            <xar:comment>
+                You can use different user-view-[pubtype].xd templates for different pubtypes,
+                and also a separate user-view-frontpage.xd template for the articles frontpage
+            </xar:comment>
+            <xar:template file="alphapager" type="module" />
+            <xar:if condition="!empty($author) or !empty($pubdate)">
+                <h2>
+                    <xar:if condition="!empty($pubdate)">
+                        <xar:ml>
+                            <xar:mlstring>Publication Date : #(1)</xar:mlstring>
+                            <xar:mlvar>#$pubdate#</xar:mlvar>
+                        </xar:ml>
+                    </xar:if>
+                    <xar:if condition="!empty($author)">
+                        <xar:ml>
+                            <xar:mlstring>By Author : #(1)</xar:mlstring>
+                            <xar:mlvar>#$author#</xar:mlvar>
+                        </xar:ml>
+                    </xar:if>
+                </h2>
+            </xar:if>
+
+            <xar:if condition="!empty($numcols) and $number gt 0">
+             <xar:comment>Changed for catetory grouping functionality Article v1.5.5</xar:comment>
+
+                <xar:if condition="!empty($catgrouping)">
+                    <div id="article-columns" style="width: 98%;">
+                        <xar:foreach in="$catgrouping" key="$catgroup" value="$catgroupid">
+                            <xar:set name="catinfo">xarModAPIFunc('categories','user','getcatinfo',array('cid'=>$catgroup))</xar:set>
+                            <div style="left: 1px; float: left; width: #$colwidth#%; vertical-align: top;">
+                                #$catinfo['name']#
+                                <xar:foreach in="$catgroupid" key="$catrow" value="$catrowvalue">
+                                         #$catrowvalue#
+                                </xar:foreach>
+                            </div>
+                        </xar:foreach>
+                    </div>
+                <xar:else />
+                    <div id="article-columns" style="width: 98%;">
+                        <xar:foreach in="$columns" key="$col">
+                            <div style="left: 1px; float: left; width: #$colwidth#%; vertical-align: top;">
+                                <xar:foreach in="$columns[$col]" key="$row">
+                                    #$columns[$col][$row]#
+                                </xar:foreach>
+                            </div>
+                        </xar:foreach>
+                    </div>
+                </xar:if>
+            <xar:elseif condition="!empty($number)" />
+                <xar:if condition="!empty($catgrouping)">
+                    <xar:foreach in="$catgrouping" key="$catgroup" value="$catgroupid">
+                        <xar:set name="catinfo">xarModAPIFunc('categories','user','getcatinfo',array('cid'=>$catgroup))</xar:set>
+                        <div class="xar-clear-left">
+                            #$catinfo['name']#
+                            <xar:foreach in="$catgroupid" key="$catrow" value="$catrowvalue">
+                               #$catrowvalue#
+                            </xar:foreach>
+                        </div>
+                    </xar:foreach>
+                <xar:else />
+                    <xar:foreach in="$columns" key="$col">
+                        <xar:foreach in="$columns[$col]" key="$row">
+                            #$columns[$col][$row]#
+                        </xar:foreach>
+                    </xar:foreach>
+                </xar:if>
+
+            </xar:if>
+            <xar:comment>End of changed for category grouping functionality Article v1.5.5</xar:comment>
+
+
+            #$output#
+
+            <br class="xar-clearboth" />
+
+            <xar:if condition="!empty($showcols)">
+                <xar:if condition="$showcols eq 1">
+                    <a href="#xarModURL('articles','user','view',array('numcols' =&gt; 1))#">
+                        <xar:mlstring>single-column display</xar:mlstring>
+                    </a>
+                <xar:else />
+                    <a href="#xarModURL('articles','user','view')#">
+                        <xar:ml>
+                            <xar:mlstring>#(1)-column display</xar:mlstring>
+                            <xar:mlvar>#$showcols#</xar:mlvar>
+                        </xar:ml>
+                    </a>
+                </xar:if>
+            </xar:if>
+
+            <div class="xar-align-center">
+                <xar:comment>$pager (combining the pager and the sort links) will be removed in later versions</xar:comment>
+                <div>#$viewpager#</div>
+                <xar:if condition="isset($sortlinks) and count($sortlinks) gt 0">
+                    <xar:mlstring>Sort by </xar:mlstring>
+                    <xar:foreach in="$sortlinks" value="$sortitem">
+                        <xar:if condition="!empty($sortitem.slink)">
+                            <a href="#$sortitem.slink#">#$sortitem.stitle#</a>
+                        <xar:else/>
+                            #$sortitem.stitle#
+                        </xar:if>
+                    </xar:foreach>
+                </xar:if>
+            </div>
+
+            <xar:if condition="!empty($showprevnext)">
+                <xar:categories-navigation layout="prevnext" />
+            </xar:if>
+        </div>
+    </div>
+</div>

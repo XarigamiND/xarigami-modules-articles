@@ -1,0 +1,85 @@
+<xar:if condition="isset($nextlevel)">
+    <xar:set name="curlevel">$nextlevel</xar:set>
+</xar:if>
+<xar:if condition="isset($nextfield)">
+    <xar:set name="curfield">$nextfield</xar:set>
+</xar:if>
+<xar:if condition="isset($nextvalue)">
+    <xar:set name="curvalue">$nextvalue</xar:set>
+</xar:if>
+<ul style="list-style-type: circle">
+    <xar:foreach in="$curvalue" key="$subkey" value="$subvalue">
+        <li>
+            <xar:if condition="$curfield eq 'pubtypeid'">
+                <xar:set name="curlabel">
+                    #$pubtypes[$subkey]['descr']# 
+                </xar:set>
+                <xar:set name="pubtypeid">
+                    #$subkey# 
+                </xar:set>
+                <xar:elseif condition="$curfield eq 'status'" />
+                <xar:set name="curlabel">
+                    #$statuslist[$subkey]# 
+                </xar:set>
+                <xar:set name="status">
+                    #$subkey# 
+                </xar:set>
+                <xar:elseif condition="$curfield eq 'authorid'" />
+                <xar:set name="curlabel">
+                    #xarUserGetVar('name',$subkey)# 
+                </xar:set>
+                <xar:set name="authorid">
+                    #$subkey# 
+                </xar:set>
+                <xar:elseif condition="$curfield eq 'language'" />
+                <xar:set name="curlabel">
+                    #$subkey# 
+                </xar:set>
+                <xar:set name="language">
+                    #$subkey# 
+                </xar:set>
+                <xar:elseif condition="$curfield eq 'pubdate_year' or $curfield eq 'pubdate_month' or $curfield eq 'pubdate_day'" />
+                <xar:set name="curlabel">
+                    #$subkey# 
+                </xar:set>
+                <xar:set name="pubdate">
+                    #$subkey# 
+                </xar:set>
+            </xar:if>
+            <a href="#xarModURL('articles','admin','view',array('ptid' => $pubtypeid, 'authorid' => $authorid, 'lang' => $language, 'status[]' => $status, 'pubdate' => $pubdate))#">#$curlabel# </a> 
+<xar:comment>
+    Include template recursively here
+</xar:comment>
+            <xar:if condition="!empty($group[$curlevel]) and is_array($subvalue)">
+                <xar:set name="nextfield">$group[$curlevel]</xar:set>
+                <xar:set name="nextlevel">$curlevel + 1</xar:set>
+                <xar:set name="nextvalue">$subvalue</xar:set>
+                <xar:template file="substats" type="module" />
+            <xar:else/>
+               : #$subvalue#
+            </xar:if>
+            <xar:if condition="$curfield eq 'pubtypeid'">
+                <xar:set name="pubtypeid">
+                    null 
+                </xar:set>
+                <xar:elseif condition="$curfield eq 'status'" />
+                <xar:set name="status">
+                    null 
+                </xar:set>
+                <xar:elseif condition="$curfield eq 'authorid'" />
+                <xar:set name="authorid">
+                    null 
+                </xar:set>
+                <xar:elseif condition="$curfield eq 'language'" />
+                <xar:set name="language">
+                    null 
+                </xar:set>
+                <xar:elseif condition="$curfield eq 'pubdate_year' or $curfield eq 'pubdate_month' or $curfield eq 'pubdate_day'" />
+                <xar:set name="pubdate">
+                    null 
+                </xar:set>
+            </xar:if>
+        </li>
+    </xar:foreach>
+</ul>
+

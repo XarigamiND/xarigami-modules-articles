@@ -1,0 +1,6 @@
+<div class="xar-form-input-wrapper">
+    <label for="numitems#$blockid#" class="help xar-form-label" title="#xarML('Enter the number of items that you wish to display.')#">
+        <xar:mlstring>Number of items</xar:mlstring>
+    </label>
+    <input type="text" name="numitems" id="numitems#$blockid#" value="#$numitems#" size="5" maxlength="5" />
+</div>

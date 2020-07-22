@@ -1,0 +1,17 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<p><strong><xar:mlstring>In Articles</xar:mlstring>:</strong></p>
+<xar:if condition="empty($loop)">
+    <xar:mlstring>No Waiting Content</xar:mlstring>
+<xar:else />
+    <xar:foreach in="$loop" value="$item">
+      <xar:set name="inst">"$item[pubid]:All:All:All"</xar:set>
+      <xar:sec mask="EditArticles" catch="false" component="Article" instance="$inst"> 
+        <a href="#$item['publink']#&amp;status[0]=0" title="#$item['pubtitle']#">
+          #$item['pubtitle']#</a> : #$item['pubcount']#
+      <xar:else />
+        <a href="&xar-modurl-articles-admin-view;&amp;status[0]=0">
+          #$item['pubtitle']#</a> : #$item['pubcount']#
+      </xar:sec>
+      <br />
+    </xar:foreach>
+</xar:if>

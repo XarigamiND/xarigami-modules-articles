@@ -1,0 +1,153 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:base-include-javascript libname="jquery" libfile="jquery.min" position="body"/>
+<xar:set name="mapcode">"
+jQuery(document).ready(function(){
+    jQuery('form#pubmap #ptid').change(function() {
+        this.form.submit();
+    });
+});
+"</xar:set>
+<xar:base-include-javascript type="code" code="$mapcode" position="body"/>
+<div class="xar-mod-page">
+    <div class="xar-mod-head">
+        <xar:if condition="xarModGetVar('themes','showusermodheader')">
+        <div class="xar-mod-title"><xar:mlstring>Article Map</xar:mlstring></div>
+        </xar:if>
+        <xar:template file="user-breadcrumb" type="module" />
+        <xar:template file="navtabs-user-map" type="module" />
+     </div>
+    <div class="xar-mod-body">
+        <xar:if condition="count($cattree) gt 0">
+             <h1><xar:mlstring>Article Map by Category</xar:mlstring></h1>
+        <xar:elseif condition="count($catgrid) gt 0" />
+            <xar:if condition="empty($descr)">
+                <h1>
+                    <xar:mlstring>Article Map by Grid</xar:mlstring>
+                </h1>
+            <xar:else />
+                <h1>
+                    <xar:ml>
+                        <xar:mlstring>Article Map by Grid for #(1)</xar:mlstring>
+                        <xar:mlvar>#$descr#</xar:mlvar>
+                    </xar:ml>
+                </h1>
+            </xar:if>
+        <xar:else />
+            <h1>
+                <xar:mlstring>Article Map by Publication Type</xar:mlstring>
+            </h1>
+        </xar:if>
+        <h2>
+            <xar:template file="publinks" type="module" />
+        </h2>
+        <div class="xar-mod-content">
+            <xar:if condition="count($cattree) gt 0">
+                <form method="post" id="catmap" action="#$maplink#">
+                    <div>
+                        <xar:mlstring>Filter: </xar:mlstring>
+                        <xar:foreach in="$catfilter" key="$cid">
+                            &#160;#$catfilter[$cid]#
+                        </xar:foreach>
+                        &#160; <input type="submit" name="go" value="Go" />
+                    </div>
+                </form>
+                <xar:foreach in="$cattree" value="$childcats">
+                    <xar:foreach in="$childcats" value="$cat">
+                        #$cat['beforetags']#
+                        <xar:if condition="!empty($cat['link'])">
+                            <a href="#$cat['link']#">#$cat['name']#</a>
+                        <xar:else />
+                            #$cat['name']#
+                        </xar:if>
+                        <xar:if condition="!empty($cat['count'])">
+                            (#$cat['count']#)
+                        </xar:if>
+                        #$cat['aftertags']#
+                    </xar:foreach>
+                </xar:foreach>
+            <xar:elseif condition="count($catgrid) gt 0" />
+                <table border="1" cellpadding="3" cellspacing="0">
+                    <xar:foreach in="$catgrid" key="$row">
+                        <tr>
+                            <xar:foreach in="$catgrid[$row]" key="$col">
+                                <xar:if condition="empty($col) or $row % 2 eq 0">
+                                    <td class="xar-accent" align="center">
+                                        #$catgrid[$row][$col]#
+                                    </td>
+                                    <xar:else />
+                                    <td align="center">
+                                        #$catgrid[$row][$col]#
+                                    </td>
+                                </xar:if>
+                            </xar:foreach>
+                        </tr>
+                    </xar:foreach>
+                </table>
+            <xar:else />
+                <form method="post" id="pubmap" action="#$maplink#">
+                    <div>
+                        <xar:mlstring>Filter: </xar:mlstring>
+                        <select id="ptid" name="ptid">
+                            <option value="">
+                                <xar:mlstring>Publication</xar:mlstring>
+                            </option>
+                            <xar:foreach in="$publinks" value="$pubtype">
+                                <xar:if condition="!empty($ptid) and $pubtype['pubid'] eq $ptid">
+                                    <option value="#$pubtype['pubid']#" selected="selected">
+                                        - #$pubtype['pubtitle']#
+                                    </option>
+                               <xar:else />
+                                    <option value="#$pubtype['pubid']#">
+                                        - #$pubtype['pubtitle']#
+                                    </option>
+                                </xar:if>
+                            </xar:foreach>
+                        </select>
+                        <xar:foreach in="$catfilter" key="$cid">
+                            &#160;&#160;&#160;#$catfilter[$cid]#
+                        </xar:foreach>
+                        &#160;&#160;&#160; <input type="submit" name="go" value="Go" />
+                    </div>
+                </form>
+                <br />
+                <br />
+                <xar:foreach in="$publinks" value="$pubtype">
+                    <xar:comment>
+                        if you want to skip other publication types, remove these comments...
+                        <xar:if condition="!empty($ptid) and $pubtype['pubid'] ne $ptid">
+                            <xar:continue />
+                        </xar:if>
+                    </xar:comment>
+                    <div class="xar-accent-outline">
+                        <div class="xar-title xar-accent xar-standard-box-padding">
+                            <xar:if condition="empty($pubtype['publink'])">
+                                #$pubtype['pubtitle']#
+                                <xar:else />
+                                <a href="#$pubtype['publink']#">#$pubtype['pubtitle']#</a>
+                            </xar:if>
+                            <xar:if condition="!empty($pubtype['pubcount'])">
+                                (#$pubtype['pubcount']#)
+                            </xar:if>
+                        </div>
+                        <div class="xar-standard-box-padding">
+                            <xar:foreach in="$pubtype['cats']" value="$childcats">
+                                <xar:foreach in="$childcats" value="$cat">
+                                    #$cat['beforetags']#
+                                    <xar:if condition="!empty($cat['link'])">
+                                        <a href="#$cat['link']#">#$cat['name']#</a>
+                                        <xar:else />
+                                        #$cat['name']#
+                                    </xar:if>
+                                    <xar:if condition="!empty($cat['count'])">
+                                        (#$cat['count']#)
+                                    </xar:if>
+                                    #$cat['aftertags']#
+                                </xar:foreach>
+                            </xar:foreach>
+                        </div>
+                    </div>
+                </xar:foreach>
+            </xar:if>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,40 @@
+<h4><xar:mlstring>Where the glossary items are held</xar:mlstring></h4>
+<div>
+    <span class="help" title="#xarML('Choose the publication type for the glossary.')#"><label for="ptid_block_#$bid#"><xar:mlstring>Publication Type</xar:mlstring></label>:</span>
+</div>
+<div>
+    <select name="ptid" id="ptid_block_#$bid#">
+        <option value="0"><xar:mlstring>All</xar:mlstring></option>
+            <xar:foreach in="$pubtypes" key="$pubid" value="$pubtype">
+                <xar:if condition="!empty($ptid) and $ptid eq $pubid">
+                    <option value="#$pubid#" selected="selected">#$pubtype['descr']#</option>
+                <xar:else />
+                    <option value="#$pubid#">#$pubtype['descr']#</option>
+                </xar:if>
+            </xar:foreach>
+    </select>
+</div>
+
+<div>
+    <span class="help" title="#xarML('Choose the category for the glossary.')#"><label for="cid_block_#$bid#"><xar:mlstring>Category</xar:mlstring></label>:</span>
+</div>
+<div>
+    <select name="cid" id="cid_block_#$bid#">
+        <option value="0"><xar:mlstring>All</xar:mlstring></option>
+        <xar:foreach in="$categorylist" value="$catlistvalue">
+            <xar:if condition="!empty($cid) and $cid eq $catlistvalue['cid']">
+                <option value="#$catlistvalue['cid']#" selected="selected">#$catlistvalue['name']#</option>
+            <xar:else />
+                <option value="#$catlistvalue['cid']#">#$catlistvalue['name']#</option>
+            </xar:if>
+        </xar:foreach>
+    </select>
+</div>
+
+<h4><xar:mlstring>How the glossary block is invoked</xar:mlstring></h4>
+<div>
+    <span class="help" title="#xarML('The name of the glossary parameter to trigger the block.')#"><label for="paramname_#$bid#"><xar:mlstring>Parameter Name</xar:mlstring></label>:</span>
+</div>
+<div>
+    <input type="text" name="paramname" id="paramname_block_#$bid#" size="20" maxlength="20" value="#xarVarPrepForDisplay($paramname)#"/>
+</div>

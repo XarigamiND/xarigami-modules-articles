@@ -1,0 +1,57 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:set name="evt_change">isset($onchange)?$onchange:''</xar:set>
+<xar:set name="id">isset($id)?$id:'id'</xar:set>
+<xar:base-include-javascript libname="jquery" libfile="jquery.min" position="body"/>
+<xar:set name="articlecode">"
+jQuery(document).ready(function(){
+    var evt_change = \"$evt_change\";
+    var reloadform = function() {
+        this.form.submit();
+    }
+    if (evt_change != '') {
+        jQuery('#".$id."').change(reloadform);
+    }
+});"
+</xar:set>
+<xar:base-include-javascript position="body" type="code" code="$articlecode" />
+
+<xar:if condition="$displayonly">
+    #$options[$value]['name']#
+    <input type="hidden"  name="#$name#" id="#$id#" value="#$value#" />
+<xar:else />
+    <select name="#$name#" id="#$id#" class="#$class#" size="#$size#" tabindex="#$tabindex#" >
+        <xar:if condition="isset($firstline) and !empty($firstline)">
+            <xar:if condition="!is_array($firstline)">
+                <xar:set name="firstline">explode(',',$firstline)</xar:set>
+                <xar:if condition="isset($firstline[1])">
+                    <option value="#$firstline[0]#">#$firstline[1]#</option>
+                <xar:else />
+                    <option value="">#$firstline[0]#</option>
+                </xar:if>
+            <xar:else />
+                <xar:if condition="isset($firstline['name'])">
+                    <option value="#$firstline['id']#">#$firstline['name']#</option>
+                <xar:else />
+                    <option value="">#$firstline['id']#</option>
+                </xar:if>
+            </xar:if>
+        </xar:if>
+        <xar:foreach in="$options" value="$option" >
+            <xar:if condition="empty($option['id']) or $option['id'] ne $option['name']">
+                <xar:if condition="$option['id'] eq $value" >
+                    <option value="#$option['id']#" selected="selected">#$option['name']#</option>
+                <xar:else />
+                    <option value="#$option['id']#">#$option['name']#</option>
+                </xar:if>
+            <xar:elseif condition="$option['id'] eq $value" />
+                <option selected="selected">#$option['name']#</option>
+            <xar:else />
+                <option>#$option['name']#</option>
+            </xar:if>
+        </xar:foreach>
+    </select>
+
+    <xar:if condition="!empty($invalid)">
+        <span class="xar-error">#$invalid#</span>
+    </xar:if>
+</xar:if>

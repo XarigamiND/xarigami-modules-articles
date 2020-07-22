@@ -1,0 +1,144 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:base-include-javascript libname="jquery" libfile="jquery.min" />
+<xar:set name="articleprivscode">"
+jQuery(document).ready(function(){
+    var reloadform = function() {
+        this.form.action='" . xarModURL('articles','admin','privileges', array(), false) . "';
+        ;this.form.submit();
+    }
+    jQuery('#ptid,#uid,#author,#aid').change(reloadform);
+
+});"
+</xar:set>
+<xar:base-include-javascript position="body" type="code" code="$articleprivscode" />
+<div class="xar-mod-page">
+    <div class="xar-mod-head">
+        <xar:comment>This template is used in the Privileges module - let's set the privilege tabs and breadcrumbs</xar:comment>
+        <xar:set name="pagetitle"><xar:mlstring>Privilege Administration</xar:mlstring></xar:set>
+        <xar:if condition="!xarRequestIsAJAX()">
+            <xar:template type="module"  module="base" file="admin-menu" subdata="array('menumod'=&gt;'privileges','pagetitle'=&gt;$pagetitle)" />
+        </xar:if>
+    </div>
+    <div class="xar-mod-body">
+        <div class="xar-mod-content">
+            <h1>
+                <xar:ml>
+                    <xar:mlstring>Select articles access for privilege '#(1)'</xar:mlstring>
+                    <xar:mlvar>#$extname#</xar:mlvar>
+                </xar:ml>
+            </h1>
+            <form method="post" id="articleprivs" action="#xarModURL('articles','admin','privileges')#">
+                <div class="xar-form-input-wrapper">
+                    <label for="ptid" class="xar-form-label">
+                            <xar:mlstring>Publication Type</xar:mlstring>
+                    </label>
+                    <select name="ptid" id="ptid">
+                        <option value="0">
+                            <xar:mlstring>All</xar:mlstring>
+                        </option>
+                        <xar:foreach in="$pubtypes" key="$pubid" value="$pubtype">
+                            <xar:if condition="!empty($ptid) and $ptid eq $pubid">
+                                <option value="#$pubid#" selected="selected">#$pubtype['descr']#</option>
+                                <xar:else />
+                                <option value="#$pubid#">#$pubtype['descr']#</option>
+                            </xar:if>
+                        </xar:foreach>
+                    </select>
+                </div>
+                <div class="xar-form-input-wrapper">
+                    <label class="xar-form-label">
+                            <xar:mlstring>Category</xar:mlstring>
+                    </label>
+                    <div class="xar-form-container-after">
+                        <xar:foreach in="$cats" key="$catid">
+                            #$cats[$catid]#
+                        </xar:foreach>
+                    </div>
+                </div>
+                <xar:if condition="!empty($showauthor)">
+                    <div class="xar-form-input-wrapper">
+                        <label for="author" class="xar-form-label">
+                            <xar:mlstring>Author</xar:mlstring>
+                        </label>
+                        <select name="uid" id="uid">
+                            <option value="0">
+                                <xar:mlstring>All / Other --&gt;</xar:mlstring>
+                            </option>
+                            <xar:foreach in="$authorlist" key="$id">
+                                <xar:if condition="$id eq $uid">
+                                    <option value="#$id#" selected="selected">#xarVarPrepForDisplay($authorlist[$id])#</option>
+                                    <xar:else />
+                                    <option value="#$id#">#xarVarPrepForDisplay($authorlist[$id])#</option>
+                                </xar:if>
+                            </xar:foreach>
+                        </select>
+                        <input type="text" name="author" id="author" value="#$author#" size="15" />
+                    </div>
+                <xar:else />
+                    <input type="hidden" name="uid" id="uidhidden" value="0" />
+                </xar:if>
+                <div class="xar-form-input-wrapper">
+                    <label for="aid" class="xar-form-label">
+                        <xar:mlstring>Article</xar:mlstring>
+                    </label>
+                    <input type="text" name="aid" id="aid" value="#$aid#" size="10" /> <xar:mlstring>Enter Article number</xar:mlstring>&#160;
+                     <xar:if condition="!empty($title)">
+                        <xar:mlstring>Title</xar:mlstring>: #$title#
+                    </xar:if>
+                </div>
+                <div class="xar-form-input-wrapper">
+                    <label for="aid" class="xar-form-label">
+                        <xar:mlstring>Access Level</xar:mlstring>
+                    </label>
+                    <xar:data-input type="dropdown" name="extlevel" id="extlevel" options="$privlevels" />
+                </div>
+                <br />
+                <div class="xar-form-input-wrapper-after">
+                        <input type="submit" value="#$refreshlabel#" />
+                </div>
+
+                <p class="xar-form-input-wrapper-after">
+                    <xar:ml>
+                        <xar:mlstring>There are #(1) articles matching these selection criteria at the moment</xar:mlstring>
+                        <xar:mlvar>#$numitems#</xar:mlvar>
+                    </xar:ml>
+                </p>
+                <p class="xar-form-input-wrapper-after">
+                    <xar:ml>
+                        <xar:mlstring>(Instance Definition #(1))</xar:mlstring>
+                        <xar:mlvar>#$extinstance#</xar:mlvar>
+                    </xar:ml>
+                </p>
+                <div class="xar-form-footer">
+                    <input type="hidden" name="extpid" id="extpid" value="#$extpid#" />
+                    <input type="hidden" name="extname" id="extname" value="#$extname#" />
+                    <input type="hidden" name="extrealm" id="extrealm" value="#$extrealm#" />
+                    <input type="hidden" name="extmodule" id="extmodule" value="#$extmodule#" />
+                    <input type="hidden" name="extcomponent" id="extcomponent" value="#$extcomponent#" />
+                    <input type="hidden" name="pparentid" id="pparentid" value="#$pparentid#" />
+                    <input type="submit" name="apply" value="#$applylabel#" />
+                </div>
+            </form>
+            <p>
+                <xar:mlstring>Some examples : (assuming your users have read access by default)</xar:mlstring>
+            </p>
+            <ul style="list-style-type:disc;">
+                <li><xar:mlstring>In order to allow 'Friends' to submit News Articles (and only that), define a privilege 'SubmitNews'
+                    (or whatever name you prefer), and choose the publication type "News Articles" (instance 1:All:All:All)
+                    and access level "Submit (Comment)" above. Press "Finish and Apply to Privilege", and then assign that privilege to the 'Friends' role.
+                    </xar:mlstring>
+                </li>
+                <li><xar:mlstring>In order to stop 'Strangers' from viewing Documents, define some privilege 'NoDocuments'
+                with publication type "Documents" (instance 2:All:All:All) and access level "No Access". Then assign that privilege to the 'Strangers' role.
+                </xar:mlstring>
+                </li>
+            </ul>
+            <p>
+                <xar:mlstring>Note: if you want to deny access to all articles in a particular category with ID 123,
+                    you can also define a privilege for module 'categories', component 'Category', category name 'All'
+                    and category ID '123'. This will remove the category from the articles map and categories navigation as well.
+                </xar:mlstring>
+            </p>
+        </div>
+    </div>
+</div>

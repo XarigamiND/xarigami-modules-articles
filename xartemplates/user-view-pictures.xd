@@ -1,0 +1,101 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:template file="publinks" type="module" />
+<xar:style scope="module" module="articles" file="gallery" />
+<xar:base-include-javascript libname="jquery" libfile="jquery.min" plugin="cluetip"  pluginfile="jquery.cluetip" style="jquery.cluetip" position="body"/>
+<xar:set name="gallerycode">"
+jQuery(document).ready(function(){
+
+    $('a.[class^=galleryzoom]').css({border: '1px solid #ccc',background: '#efefef'}).cluetip({
+        showTitle: true,
+        local: true,
+        clickThrough: true,
+        topOffset: 20,
+        leftOffset: -100,
+        width:'150px',
+        arrows: true,
+        cluetipClass: 'jtip'
+     });
+});
+"</xar:set>
+<xar:base-include-javascript type="code" code="$gallerycode" position="body"/>
+<div class="xar-mod-page">
+    <div class="xar-mod-head">
+        <xar:template type="module" module="articles" file="user-menu" />
+    </div>
+    <div class="xar-mod-body">
+        <xar:if condition="!empty($ptid) or !empty($catid)">
+            <xar:categories-navigation layout="trails" showchildren="1" module="articles" itemtype="$ptid" catid="$catid" showcatcount="$showcatcount" showempty="1" />
+        </xar:if>
+        <xar:if condition="!empty($author)">
+        <h1>
+            <xar:ml>
+                <xar:mlstring>By Author : #(1)</xar:mlstring>
+                <xar:mlvar>#$author#</xar:mlvar>
+            </xar:ml>
+        </h1>
+       </xar:if>
+
+        <div class="xar-mod-content">
+            <xar:comment>
+            You can use different user-view-[pubtype].xt templates for different pubtypes,
+            and also a separate user-view-frontpage.xt template for the articles frontpage
+            </xar:comment>
+            <xar:if condition="!empty($numcols) and $number gt 0">
+                <table id="picture_gallery" class="xar-fullwidth">
+                    <tr>
+                        <xar:foreach in="$columns" key="$col">
+                            <td style="vertical-align: top;text-align: center;width: #$colwidth#%;">
+                                <xar:foreach in="$columns[$col]" key="$row">
+                                    #$columns[$col][$row]#
+                                </xar:foreach>
+                            </td>
+                        </xar:foreach>
+                    </tr>
+                </table>
+            <xar:elseif condition="!empty($number)" />
+                <xar:foreach in="$columns" key="$col">
+                    <xar:foreach in="$columns[$col]" key="$row">
+                        #$columns[$col][$row]#
+                    </xar:foreach>
+                </xar:foreach>
+            </xar:if>
+            #$output#
+            <xar:if condition="!empty($showcols)">
+                <xar:if condition="$showcols eq 1">
+                    <a href="#xarModURL('articles','user','view',array('numcols' => 1))#">
+                        <xar:mlstring>single-column display</xar:mlstring>
+                    </a>
+                <xar:else />
+                    <a href="#xarModURL('articles','user','view')#">
+                        <xar:ml>
+                            <xar:mlstring>#(1)-column display</xar:mlstring>
+                            <xar:mlvar>#$showcols#</xar:mlvar>
+                        </xar:ml>
+                    </a>
+                </xar:if>
+            </xar:if>
+
+            <xar:template file="alphapager" type="module" />
+
+            <div class="xar-align-center">
+            <xar:comment>$pager (combining the pager and the sort links) will be removed in later versions</xar:comment>
+                <div>#$viewpager#</div>
+                <xar:if condition="isset($sortlinks) and count($sortlinks) gt 0">
+                    <xar:mlstring>Sort by </xar:mlstring>
+                    <xar:foreach in="$sortlinks" value="$sortitem">
+                        <xar:if condition="!empty($sortitem['slink'])">
+                            <a href="#$sortitem['slink']#">#$sortitem['stitle']#</a>
+                        <xar:else/>
+                            #$sortitem['stitle']#
+                        </xar:if>
+                    </xar:foreach>
+                </xar:if>
+            </div>
+
+            <xar:if condition="!empty($showprevnext)">
+                <xar:categories-navigation layout="prevnext" />
+            </xar:if>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,87 @@
+<xar:set name="checkall"><xar:mlstring>Check all</xar:mlstring></xar:set>
+<xar:set name="checknone"><xar:mlstring>Uncheck all</xar:mlstring></xar:set>
+<xar:set name="numitems">isset($numitems)?$numitems:0;</xar:set>
+<xar:set name="articlestring">xarML("WARNING: Any existing articles of this publication type will also be deleted!");</xar:set>
+
+<xar:set name="pubtypecode">"
+jQuery(document).ready(function() {
+    var dialog_width = 300;
+    var dialog_height = 'auto';
+    var counter = 0;
+    var articlestring = \"$articlestring\";
+    var jptid = 0;
+
+    jQuery('table.xar-items a[id^=delete]').click(function() {
+        var a = this;
+        var jptid = jQuery.trim(jQuery(this).parent().parent().children(':first').text());
+        var ptidparam = \"chr(38).'ptid='+jptid\";
+        jQuery('#"."xardialogtarget').remove();
+        jQuery('body').append('" . chr(60) . "div id=\'xardialogtarget\' style=\'display: none;\'" . chr(62) . chr(60) . "/div" . chr(62) . "');
+        jQuery('#" . "xardialogtarget').load(this.getAttribute('href') + '".chr(38)."pageName=module .xar-mod-body ".chr(62)." *').dialog({
+            title: '" . xarML('Delete this publication type?') . "',
+            width: dialog_width,
+            height: dialog_height,
+            buttons: {
+                '". xarML('Cancel') . "': function() { jQuery(this).dialog('close'); },
+                '". xarML('Delete') . "': function() { jQuery('#"."xardialogtarget form#deletepubtype').submit(); }
+            },
+            modal: true,
+            draggable: false,
+            resizable: false
+        });
+
+        return false;
+    });
+/*
+    var pdialog_width = Math.floor(jQuery(window).width() * .85);
+    var pdialog_height = Math.floor(jQuery(window).height() * .85);
+
+    var propval_trigger = function() {
+        jQuery('#"."xardialogtarget').remove();
+        jQuery('body').append('".chr(60)."div id=\'xardialogtarget\' style=\'display: none;\'".chr(62).chr(60)."/div".chr(62)."');
+        jQuery('#" . "xardialogtarget').load(this.getAttribute('href') + '".chr(38)."pageName=module .xar-mod-body ".chr(62)." *').dialog(
+            {
+                title: jQuery(this).attr('title'),
+                width: pdialog_width,
+                height: pdialog_height,
+                bgiframe: true,
+                modal: true,
+                draggable: false,
+                resizable: false,
+                buttons: {
+                    '" . xarML('Close') . "': function() { jQuery(this).dialog('close');},
+                }
+            }
+        );
+        return false;
+    }
+
+    jQuery('table#"."proplist a, a#"."xmlexport').click(propval_trigger);
+*/
+    //modifyconfig validation
+    jQuery('#newpubtype, #modifypubtype' ).validate({
+        rules: {
+            name: {
+                required: true,
+            },
+            descr: {
+                required: true,
+            },
+
+        },
+        messages: {
+            name: {
+                required: '" . xarML('&#160;* Required') . "'
+            },
+            descr: {
+                required: '" . xarML('&#160;* Required') . "'
+            },
+
+        },
+        errorClass: 'xar-error',
+        errorElement: 'span'
+    });
+});
+"</xar:set>
+<xar:base-include-javascript type="code" code="$pubtypecode" position="body"/>
+

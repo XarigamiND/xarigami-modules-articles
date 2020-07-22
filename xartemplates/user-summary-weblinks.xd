@@ -1,0 +1,49 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<div class="xar-norm xar-standard-box-padding">
+    <xar:if condition="!empty($categories) and count($categories) gt 0">
+        [
+        <xar:foreach in="$categories" value="$cat">
+            #$cat['cjoin']# <a href="#$cat['clink']#">#$cat['cname']#</a>
+        </xar:foreach>
+        ]
+    </xar:if>
+    <a class="xar-title" href="#$redirect#">#$title#</a>
+    <br />
+    <xar:mlstring>Description: </xar:mlstring>
+    #$summary#
+    <br />
+    <xar:if condition="!empty($notes)">
+        <xar:mlstring>Source: </xar:mlstring>
+        #$notes#
+        <br />
+    </xar:if>
+    <xar:mlstring>Added on: </xar:mlstring>
+    #xarLocaleGetFormattedDate('long',$pubdate)# #xarLocaleGetFormattedTime('long',$pubdate)#
+    <xar:if condition="!empty($rating)">
+        -
+        <xar:mlstring>Rating: </xar:mlstring>
+         #$rating#
+    </xar:if>
+    <xar:if condition="!empty($counter)">
+        <xar:if condition="$counter eq 1">
+            (#$counter#&#160;
+            <xar:mlstring>read</xar:mlstring>
+            )
+            <xar:else />
+            (#$counter#&#160;
+            <xar:mlstring>reads</xar:mlstring>
+            )
+        </xar:if>
+    </xar:if>
+    | <a href="#$link#">
+        <xar:mlstring>Rate/Comment</xar:mlstring>
+    </a>
+    <div class="xar-articles-keywords">
+        <xar:if condition="!empty($keywords)">
+            <xar:mlstring>Keywords: </xar:mlstring>
+            <xar:loop name="$keywords">
+                <a href="#xarModUrl('keywords', 'user', 'main', array('keyword'=&gt; $loop:item['keyword']))#" title="#$loop:item['keyword']#">#$loop:item['keyword']#</a>
+            </xar:loop>
+        </xar:if>
+    </div>
+</div>

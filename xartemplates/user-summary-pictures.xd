@@ -1,0 +1,60 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:if condition="!empty($categories) and count($categories) gt 0">
+    <div>
+        [
+        <xar:foreach in="$categories" value="$cat">
+            #$cat['cjoin']#
+            <a href="#$cat['clink']#">
+                #$cat['cname']#
+            </a>
+        </xar:foreach>
+        ]
+    </div>
+</xar:if>
+
+<div class="gallery-content xar-norm ">
+    <ul id="gallery" style="list-style: none;">
+        <xar:if condition="xarModIsHooked('uploads','articles',$pubtypeid) and substr($body_value,0,1) eq ';'">
+            <xar:set name="img_output">xarModAPIFunc('uploads','user','showoutput',array('value' => $body_value, 'multiple' => true))</xar:set>
+            <xar:foreach in="$img_output" key="$fileId" value="$fileInfo">
+                <li class="gallery-picture">
+                    <a class="galleryzoom#$aid#" href="#$link#" title="#$title#" rel="div.imgnotes">
+                        <xar:if condition="xarModIsAvailable('images')">
+                            <xar:set name="file">$fileInfo</xar:set>
+                            <xar:template file="picture-thumbnail" type="module" />
+                        <xar:else />
+                            <img src="#xarModURL('uploads', 'user', 'download', array('fileId' => $fileInfo['fileId']))#" width="150px" alt="#$title#" id="thephoto" constrain="1"/>
+                        </xar:if>
+                    </a>
+                     <p class="imgtitle">#$title#</p>
+                </li>
+            </xar:foreach>
+        <xar:else />
+            <li class="gallery-picture">
+                <a href="#$link#" class="galleryzoom#$aid#" title="#$title#"  rel="div.imgnotes">
+                    #$summary#
+                </a>
+                <p class="imgtitle">#$title#</p>
+            </li>
+        </xar:if>
+        <xar:set name="inotes">!empty($notes)?$notes:''</xar:set>
+        <div class="imgnotes" style="display:none;">#$inotes#</div>
+    </ul>
+</div>
+
+<xar:if condition="!empty($counter)">
+    <xar:if condition="$counter eq 1">
+        (#$counter#&#160;<xar:mlstring>read</xar:mlstring>)
+    <xar:else />
+        (#$counter#&#160;<xar:mlstring>reads</xar:mlstring>)
+    </xar:if>
+</xar:if>
+
+<div class="xar-articles-keywords">
+    <xar:if condition="!empty($keywords)">
+        <xar:mlstring>Keywords</xar:mlstring>:
+        <xar:loop name="$keywords">
+            <a href="#xarModUrl('keywords', 'user', 'main', array('keyword'=> $loop:item['keyword']))#" title="#$loop:item['keyword']#">#$loop:item['keyword']#</a>
+        </xar:loop>
+    </xar:if>
+</div>

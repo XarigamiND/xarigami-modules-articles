@@ -1,0 +1,36 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:style scope="module" module="base" file="tabs" />
+<xar:set name="request">xarRequestGetInfo()</xar:set>
+<xar:set name="menulinks">xarModAPIFunc($request[0], 'user', 'getmenulinks')</xar:set>
+<xar:set name="activetab">#$request.2#</xar:set>
+<xar:set name="mainname">xarML(xarModGetDisplayableName($request[0]))</xar:set>
+<xar:set name="usealiasname">xarModGetVar($request[0], 'useModuleAlias')</xar:set>
+<xar:set name="aliasname">xarModGetVar($request[0],'aliasname')</xar:set>
+<xar:set name="itemtype">isset($itemtype)?$itemtype:$ptid</xar:set>
+<xar:set name="mainname">(isset($usealiasname) AND ($usealiasname==1) AND  isset($aliasname) AND !empty($aliasname)) ?ucfirst($aliasname) :$mainname</xar:set>
+<xar:if condition="xarModGetvar('themes','showuserbreadcrumbs')">
+    <p class="xar-breadcrumbs">
+        <a href="#xarServerGetBaseURL()#" title="#xarML('Home')#"><xar:mlstring>Home</xar:mlstring></a>
+        &#187;&#160;<a href="#xarModURL($request[0],'user','main')#" title="#xarML('Overview')#">#$mainname#</a>
+        <xar:if condition="!empty($menulinks) and is_array($menulinks)">
+            <xar:foreach in="$menulinks" key="$menukey" value="$menulink">
+                <xar:if condition="is_array($menulink)">
+                    <xar:if condition="in_array($activetab, $menulink['active']) and (isset($itemtype) and ($itemtype eq $menulink['itemtype']))">
+                         &#187;&#160;<a title="#$menulink.title#" href="#$menulink.url#" >#$menulink.label#</a>
+                    </xar:if>
+                    <xar:if condition="isset($menulink['activelabels'])">
+                        <xar:foreach in="$menulink['active']" key="$key" value="$activelink">
+                            <xar:if condition="($activetab eq $activelink) and isset($menulink['activelabels'][$key])
+                                and !empty($menulink['activelabels'][$key])
+                                and isset($itemtype)
+                                and ($itemtype eq $menulink['itemtype'])">
+                                <xar:set name="linkname">$menulink['activelabels'][$key]</xar:set>
+                                &#187;&#160;#$linkname#
+                            </xar:if>
+                        </xar:foreach>
+                    </xar:if>
+                </xar:if>
+            </xar:foreach>
+        </xar:if>
+    </p>
+</xar:if>

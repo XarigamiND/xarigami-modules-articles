@@ -1,0 +1,37 @@
+<!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+<div class="xar-mod-page">
+    <div class="xar-mod-head">
+        <xar:template file="user-breadcrumb" type="module" module="base" />
+        <xar:template file="navtabs-user" type="module" />
+    </div>
+    <div class="xar-mod-body">
+        <div class="xar-mod-content">
+            <fieldset>
+                <legend><xar:mlstring>User Error</xar:mlstring></legend>
+                <img src="#xarTplGetImage('user-error.png','base')#" alt="#xarML('System Message')#" width="96" height="96" class="xar-module-icon"/>
+                <xar:if condition="!isset($errortype)">
+                    <div class="xar-padding-thick">
+                        <xar:mlstring>No error message is available. </xar:mlstring>
+                    <br />
+                        <xar:mlstring>Please contact the system administrator.</xar:mlstring>
+                    </div>
+                <xar:elseif condition="$errortype eq 'creation_failed'" />
+                    <div class="xar-padding-thick">
+                        <p>
+                            <xar:ml>
+                                <xar:mlstring>Creation of the article failed due to #(1).</xar:mlstring>
+                                <xar:mlvar>#$var1#</xar:mlvar>
+                            </xar:ml>
+                        </p>
+                    </div>
+                <xar:else />
+                    <div class="xar-padding-thick">
+                        <xar:mlstring>No error message is available.</xar:mlstring>
+                        <br />
+                        <xar:mlstring>Please contact the system administrator.</xar:mlstring>
+                    </div>
+                </xar:if>
+            </fieldset>
+        </div>
+    </div>
+</div>

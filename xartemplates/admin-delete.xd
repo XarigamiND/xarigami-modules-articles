@@ -1,0 +1,43 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<div class="xar-mod-page">
+    <div class="xar-mod-head">
+        <xar:if condition="!xarRequestIsAJAX()">
+            <xar:template type="module"  module="base" file="admin-menu" />
+        </xar:if>
+    </div>
+    <div class="xar-mod-body">
+        <h1>
+            <xar:mlstring>Delete Article</xar:mlstring>
+        </h1>
+        <div class="xar-mod-content">
+            <xar:comment>You can use different admin-delete-[pubtype].xd templates for different pubtypes</xar:comment>
+            <form method="post" id="articles-admin-delete" action="#xarModURL('articles','admin','delete')#">
+                <fieldset>
+                    <legend>
+                        <xar:mlstring>Delete this article?</xar:mlstring>
+                    </legend>
+                    <div class="xar-form-input-wrapper">
+                        <label class="xar-form-label">AID: </label>
+                        #$article['aid']#
+                    </div>
+                    <div class="xar-form-input-wrapper-after">
+                        #$article['title']#
+                    </div>
+                    <div class="xar-form-input-wrapper-after">
+                        #$article['summary']#
+                    </div>
+                </fieldset>
+                <div class="xar-form-footer">
+                     <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                    <input type="hidden" name="confirm" id="confirm" value="true" />
+                    <input type="hidden" name="aid" id="aid" value="#$aid#" />
+                    <input type="hidden" name="return_url" value="#$return_url#" />
+                    <input type="submit" value="#$confirmlabel#" />
+                    <a href="#xarModURL('articles','admin','view')#">
+                        <xar:mlstring>Cancel</xar:mlstring>
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

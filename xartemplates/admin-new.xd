@@ -1,0 +1,104 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:base-include-javascript libname="jquery" libfile="jquery.min" position="head"/>
+<xar:set name="newcode">"
+jQuery(document).ready(function(){
+    jQuery('form#pubtypelist select#ptidselect').change(function() { this.form.submit(); });
+
+});
+"</xar:set>
+<xar:base-include-javascript type="code" code="$newcode" position="body"/>
+<div class="xar-mod-page">
+    <div class="xar-mod-head">
+        <xar:if condition="!xarRequestIsAJAX()">
+          <xar:template type="module"  module="base" file="admin-menu" />
+        </xar:if>
+    </div>
+    <div class="xar-mod-body">
+        <h1 class="xar-floatleft">
+                <xar:if condition="isset($ptid) and !empty($ptid)">
+                    <xar:ml>
+                        <xar:mlstring>Add #(1) item</xar:mlstring>
+                        <xar:mlvar>#$publist[$ptid]#</xar:mlvar>
+                    </xar:ml>
+
+                <xar:else />
+                    <xar:mlstring>New article</xar:mlstring>
+                </xar:if>
+        </h1>
+        <div class="xar-align-right">
+            <form method="post" id="pubtypelist" action="#xarModURL('articles','admin','new')#" >
+                 <xar:data-input type="dropdown" name="ptidselect" id="ptidselect" options="$publist" value="$ptid" />
+                 <input type="submit" value="#xarML('Select Publication')#" />
+            </form>
+        </div>
+        <div class="xar-mod-content xar-clearleft">
+            <xar:if condition="!empty($preview)">
+                <div class="xar-preview">
+                    #$preview#
+                </div>
+            </xar:if>
+            <xar:comment>
+                You can use different admin-new-[pubtype].xd templates for different pubtypes
+            </xar:comment>
+          <xar:comment>
+                If you want to let users pre-select a category first, before selecting a publication type,
+                you can use the following tag. Note that this only makes sense if you have a single base category for your articles
+           </xar:comment>
+            <!-- xar:categories-navigation layout="trails" showchildren="1" module="articles" type="admin" func="new" itemtype="$ptid" catid="$catid" /-->
+
+            <xar:if condition="!empty($withupload)">
+                <xar:set name="enctype">
+                    'multipart/form-data'
+                </xar:set>
+                <xar:else />
+                <xar:set name="enctype">
+                    'application/x-www-form-urlencoded'
+                </xar:set>
+            </xar:if>
+
+            <xar:if condition="!empty($ptid)">
+                <form method="post" id="post" action="#xarModURL('articles','admin','create')#" enctype="#$enctype#" #$formhooks['formaction']# >
+                    <xar:comment>Instead of looping over all fields, you can also access individual field definitions via $fields['title'], $fields['summary'] etc.</xar:comment>
+                    <xar:comment>If you would like to preset certain fields via GET or POST parameters, you should set $field['definition']['preset'] = 'yes' before passing it to the xar:articles-field tag. You can also set the value directly in this template via $field['definition']['value']</xar:comment>
+                    <xar:foreach in="$fields" value="$field">
+                        <div class="xar-form-input-wrapper">
+                            <label class="xar-form-label help" for="#$field['id']#" title="#$field['label']#">#$field['label']#</label>
+                            <xar:articles-field definition="$field['definition']" />
+                        </div>
+                    </xar:foreach>
+                    <xar:if condition="!empty($formhooks['formdisplay'])">
+                        <div class="xar-form-input-wrapper">
+                        <label class="xar-form-label help" title="#xarML('Form Controls as determined by hook selection.')#">
+                            <xar:mlstring>Form Controls</xar:mlstring>
+                        </label>#$formhooks['formdisplay']#</div>
+                    </xar:if>
+                    <xar:comment>put the hooks in, each hook should be a block level element thus keeping the form valid</xar:comment>
+                    <xar:if condition="!empty($hooks)">
+                        <xar:foreach in="$hooks" key="$hookmodule">#$hooks[$hookmodule]#</xar:foreach>
+                    </xar:if>
+                    <div class="xar-form-input-wrapper">
+                        <label class="xar-form-label help" title="#xarML('This is the allowed HTML that this website has configured.')#">
+                            <xar:mlstring>Allowed HTML tags</xar:mlstring>
+                        </label>
+                        <div class="xar-form-container-after">#$allowedhtml#</div>
+                    </div>
+                    <div class="xar-form-footer">
+                        <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                        <input type="hidden" name="ptid" id="ptid" value="#$ptid#" />
+                         <input type="hidden" name="itemtype" id="itemtype" value="#$ptid#" />
+                        <xar:comment>The return_url can be set here to return to another page that the admin-view one</xar:comment>
+                        <input type="hidden" name="return_url" value="#$return_url#" />
+                        <input type="submit" name="preview" id="preview" value="#$previewlabel#" />
+                        <xar:if condition="xarSecurityCheck('EditArticles',0,'Article',$ptid.':All:All:All')">
+                            <input type="submit" name="save" id="save" value="#xarML('Save and Edit')#" />
+                        </xar:if>
+                        <input type="submit" value="#$addlabel#" />
+                        <xar:if condition="$defaultstatus gt 1">
+                          <input type="submit" name="view" id="view" value="#xarML('Save and View')#" />
+                        </xar:if>
+                    </div>
+                </form>
+            </xar:if>
+        </div>
+    </div>
+</div>

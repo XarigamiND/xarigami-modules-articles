@@ -1,0 +1,220 @@
+<div class="xar-form-input-wrapper">
+    <label class="xar-form-label help" title="#xarML('Enter the number of items that you wish to display.')#" for="numitems#$blockid#">
+        <xar:mlstring>
+            Number of items 
+        </xar:mlstring>
+    </label> <input type="text" name="numitems" id="numitems#$blockid#" value="#$numitems#" size="5" maxlength="5" /> 
+</div>
+<div class="xar-form-input-wrapper">
+    <label class="help xar-form-label" for="pubtypeid#$blockid#" title="#xarML('Choose the publication type for the featured items.')#">
+        <xar:mlstring>
+            Publication Type
+        </xar:mlstring>
+    </label>
+    <select name="pubtypeid" id="pubtypeid#$blockid#">
+        <option value="0">
+            <xar:mlstring>
+                All 
+            </xar:mlstring>
+        </option>
+        <xar:foreach in="$pubtypes" key="$pubid" value="$pubtype">
+            <xar:if condition="!empty($pubtypeid) and $pubtypeid eq $pubid">
+                <option value="#$pubid#" selected="selected">
+                    #$pubtype['descr']# 
+                </option>
+                <xar:else />
+                <option value="#$pubid#">
+                    #$pubtype['descr']# 
+                </option>
+            </xar:if>
+        </xar:foreach>
+    </select>
+</div>
+<div class="xar-form-input-wrapper">
+    <label class="help xar-form-label" title="#xarML('Choose the category for the featured items.')#" for="catfilter#$blockid#"> 
+        <xar:mlstring>
+            Category 
+        </xar:mlstring>
+    </label>
+    <select name="catfilter" id="catfilter#$blockid#">
+        <option value="0">
+            <xar:mlstring>
+                All / Current 
+            </xar:mlstring>
+        </option>
+        <xar:foreach in="$categorylist" value="$catlistx">
+            <xar:if condition="!empty($catfilter) and $catfilter eq $catlistx['cid']">
+                <option value="#$catlistx['cid']#" selected="selected">
+                    #$catlistx['name']# 
+                </option>
+                <xar:else />
+                <option value="#$catlistx['cid']#">
+                    #$catlistx['name']# 
+                </option>
+            </xar:if>
+        </xar:foreach>
+    </select> 
+</div>
+<div class="xar-form-input-wrapper">
+    <label class="help xar-form-label" title="#xarML('Choose the status (e.g. Approved, Front Page) for the featured items.')#" for="status#$blockid#"> 
+        <xar:mlstring>
+            Status 
+        </xar:mlstring>
+    </label>
+    <select name="status" id="status#$blockid#" size="1">
+        <xar:foreach in="$statusoptions" value="$statusoption">
+            <xar:if condition="!empty($status) and $status eq $statusoption['id']">
+                <option value="#$statusoption['id']#" selected="selected">
+                    #$statusoption['name']# 
+                </option>
+                <xar:else />
+                <option value="#$statusoption['id']#">
+                    #$statusoption['name']# 
+                </option>
+            </xar:if>
+        </xar:foreach>
+    </select> 
+</div>
+<div class="xar-form-input-wrapper">
+    <label class="help xar-form-label" title="#xarML('Choose the locale for the random items.')#" for="language#$blockid#"> 
+        <xar:mlstring>
+            Locale 
+        </xar:mlstring>
+    </label>
+    <select name="language" id="language#$blockid#" size="1">
+        <option value="">
+            <xar:mlstring>
+                All 
+            </xar:mlstring>
+        </option>
+        <xar:if condition="!empty($language) and $language eq 'current'">
+            <option value="current" selected="selected">
+                <xar:mlstring>
+                    Current 
+                </xar:mlstring>
+            </option>
+            <xar:else />
+            <option value="current">
+                <xar:mlstring>
+                    Current 
+                </xar:mlstring>
+            </option>
+        </xar:if>
+        <xar:foreach in="$locales" value="$locale">
+            <xar:if condition="!empty($language) and $language eq $locale">
+                <option value="#$locale#" selected="selected">
+                    #$locale# 
+                </option>
+                <xar:else />
+                <option value="#$locale#">
+                    #$locale# 
+                </option>
+            </xar:if>
+        </xar:foreach>
+    </select> 
+</div>
+<div class="xar-form-input-wrapper">
+    <label class="help xar-form-label" title="#xarML('If you wish to give the article an alternative title to be displayed as a featured item, enter the name here.')#" for="alttitle#$blockid#"> 
+        <xar:mlstring>
+            Alternate Block Title: 
+        </xar:mlstring>
+    </label> 
+    <input type="text" name="alttitle" id="alttitle#$blockid#" value="#$alttitle#" size="24" maxlength="62" />
+</div>
+<div class="xar-form-input-wrapper">
+    <label class="help xar-form-label" title="#xarML('If you wish to give the article an alternative summary to be displayed as a featured item, enter the summary here.')#" for="altsummary#$blockid#">
+        <xar:mlstring>
+            Alternate Block Summary:
+        </xar:mlstring>
+    </label>
+    <textarea name="altsummary" rows="5" cols="50" id="altsummary#$blockid#">#$altsummary#</textarea>
+</div>
+<div class="xar-form-input-wrapper-after">
+    <xar:if condition="empty($showtitle)">
+        <input type="checkbox" name="showtitle" id="showtitle#$blockid#" value="1" />
+        <xar:else />
+        <input type="checkbox" name="showtitle" id="showtitle#$blockid#" value="1" checked="checked" /> 
+    </xar:if>
+    <label class="help" title="#xarML('If you wish to show the title for the article check this box.')#" for="showtitle#$blockid#"> 
+        <xar:mlstring>
+            Show title 
+        </xar:mlstring>
+    </label> 
+</div>
+<div class="xar-form-input-wrapper-after">
+    <xar:if condition="empty($showsummary)">
+        <input type="checkbox" name="showsummary" id="showsummary#$blockid#" value="1" /> 
+        <xar:else />
+        <input type="checkbox" name="showsummary" id="showsummary#$blockid#" value="1" checked="checked" /> 
+    </xar:if>
+    <label class="help" title="#xarML('If you wish to show the summary for the article as teaser text select this box.')#" for="showsummary#$blockid#"> 
+        <xar:mlstring>
+            Show summary 
+        </xar:mlstring>
+    </label> 
+</div>
+<div class="xar-form-input-wrapper-after">
+    <xar:if condition="empty($showauthor)">
+        <input type="checkbox" name="showauthor" id="showauthor#$blockid#" value="1" /> 
+        <xar:else />
+        <input type="checkbox" name="showauthor" id="showauthor#$blockid#" value="1" checked="checked" /> 
+    </xar:if>
+    <label class="help" title="#xarML('If you wish to show the author for the article check this box.')#" for="showauthor#$blockid#"> 
+        <xar:mlstring>
+            Show author 
+        </xar:mlstring>
+    </label> 
+</div>
+<div class="xar-form-input-wrapper-after">
+    <xar:if condition="empty($showpubdate)">
+        <input type="checkbox" name="showpubdate" id="showpubdate#$blockid#" value="1" /> 
+        <xar:else />
+        <input type="checkbox" name="showpubdate" id="showpubdate#$blockid#" value="1" checked="checked" /> 
+    </xar:if>
+    <label class="help" title="#xarML('If you wish to show the publication date for the article check this box.')#" for="showpubdate#$blockid#">
+        <xar:mlstring>
+            Show publication date 
+        </xar:mlstring>
+    </label> 
+</div>
+<div class="xar-form-input-wrapper-after">
+    <xar:if condition="empty($showsubmit)">
+        <input type="checkbox" name="showsubmit" id="showsubmit#$blockid#" value="1" /> 
+        <xar:else />
+        <input type="checkbox" name="showsubmit" id="showsubmit#$blockid#" value="1" checked="checked" /> 
+    </xar:if>
+    <label class="help" title="#xarML('If you wish to show a link for new article submissions check this box.')#" for="showsubmit#$blockid#"> 
+        <xar:mlstring>
+            Show submit link 
+        </xar:mlstring>
+    </label> 
+</div>
+<xar:if condition="xarModIsHooked('dynamicdata','articles',$pubtypeid)">
+    <div class="xar-form-input-wrapper-after">
+        <xar:if condition="empty($showdynamic)">
+            <input type="checkbox" name="showdynamic" id="showdynamic#$blockid#" value="1" /> 
+            <xar:else />
+            <input type="checkbox" name="showdynamic" id="showdynamic#$blockid#" value="1" checked="checked" /> 
+        </xar:if>
+        <label class="help" title="#xarML('Select this if you wish to show the dynamic data that you have included for your publication types.')#" for="showdynamic#$blockid#"> 
+            <xar:mlstring>
+                Include dynamic data 
+            </xar:mlstring>
+        </label> 
+    </div>
+</xar:if>
+<div class="xar-form-input-wrapper-after">
+    <xar:if condition="empty($linkpubtype)">
+        <input type="checkbox" name="linkpubtype" id="linkpubtype#$blockid#" value="1" /> 
+        <xar:else />
+        <input type="checkbox" name="linkpubtype" id="linkpubtype#$blockid#" value="1" checked="checked" /> 
+    </xar:if>
+    <label class="help" title="#xarML('Set to include the publication type in the article link.')#" for="linkpubtype#$blockid#"> 
+        <xar:mlstring>
+            Link to publication type 
+        </xar:mlstring>
+    </label> 
+</div>
+<xar:comment>
+    Add include children to categories 
+</xar:comment>

@@ -1,0 +1,26 @@
+<xar:if condition="isset($cattrees) and is_array($cattrees)">
+<ul><span>You Are Here: &nbsp;</span>
+<xar:foreach in="$cattrees" value="$cattree">
+
+    <xar:if condition="isset($cattree['catparents']) and is_array($cattree['catparents']) and sizeof($cattree['catparents']) gt 0">
+    <xar:foreach in="$cattree['catparents']" value="$parent">
+        <li>
+        <xar:if condition="empty($parent['catlink'])">
+            #$parent['catlabel']#
+        <xar:else />
+          <xar:if condition="$parent['catid'] eq $cid">
+            <a class="current" href="#$parent['catlink']#">#$parent['catlabel']#</a>
+          <xar:else />
+            <a href="#$parent['catlink']#">#$parent['catlabel']#</a>
+          </xar:if>
+        </xar:if>
+        </li>
+        <xar:if condition="$parent['catid'] ne $cid">
+        #$crumbSeparator#
+        </xar:if>
+    </xar:foreach>
+    </xar:if>
+
+</xar:foreach>
+</ul>
+</xar:if>

@@ -1,0 +1,22 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<div class="xar-norm xar-standard-box-padding">
+    <xar:if condition="!empty($categories) and count($categories) gt 0">[
+    <xar:foreach in="$categories" value="$cat">#$cat['cjoin']#
+    <a href="#$cat['clink']#">#$cat['cname']#</a></xar:foreach>]</xar:if>
+    <span class="xar-title">
+        <a class="xar-title" href="#$link#">#$title#</a>
+        <xar:if condition="!empty($counter)">
+            <xar:if condition="$counter eq 1">(#$counter#&#160;
+            <xar:mlstring>read</xar:mlstring>)
+            <xar:else />(#$counter#&#160;
+            <xar:mlstring>reads</xar:mlstring>)</xar:if>
+        </xar:if>
+    </span>
+    <div class="xar-articles-keywords">
+        <xar:if condition="!empty($keywords)">
+        <xar:mlstring>Keywords</xar:mlstring>:
+        <xar:loop name="$keywords">
+            <a href="#xarModUrl('keywords', 'user', 'main', array('keyword'=&gt; $loop:item['keyword']))#" title="#$loop:item['keyword']#">#$loop:item['keyword']#</a>
+        </xar:loop></xar:if>
+    </div>
+</div>

@@ -1,0 +1,86 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<div class="xar-mod-page">
+    <div class="xar-mod-head">
+        <xar:template type="module" module="articles" file="user-menu" />
+    </div>
+    <div class="xar-mod-body">
+        <xar:categories-navigation layout="trails" showchildren="1" module="articles" itemtype="$ptid" itemid="$aid" cids="$cids" />
+        <h1>
+            #$title# <xar:if condition="!empty($editurl)"> [<a href="#$editurl#">#$edittitle#</a>]</xar:if>
+        </h1>
+        <div class="xar-mod-content">
+            <xar:if condition="!empty($counter)">
+                (#$counter#
+                <xar:mlstring>
+                    Reads
+                </xar:mlstring>
+                )
+            </xar:if>
+            <div align="right">
+                <span class="xar-sub"> #$topic_icons# </span>
+            </div>
+            #$body#
+            <br />
+            <xar:comment>
+                Hooked DD now available for active, and display,view only DD props from V 1.7.0
+                Add your own css class names to data-label or data-output tags class="myclass"
+            </xar:comment>
+            <xar:if condition="isset($properties) and count($properties) gt 0">
+            <xar:foreach in="$properties" key="$name">
+            <div class="xar-form-input-wrapper">
+                <xar:data-label property="$properties[$name]" label="id" />
+                <xar:data-output  property="$properties[$name]" value="$properties[$name]-&gt;value" />
+            </div>
+            </xar:foreach>
+            </xar:if>
+            <span class="xar-quote"> #$notes# </span>
+            <xar:if condition="!empty($previous) and !empty($next)">
+                <div class="xar-normal xar-align-right xar-padding-thick">
+                    <span> #$previous# </span> <span> #$next# </span>
+                </div>
+            </xar:if>
+
+            <xar:if condition="!empty($hooks) and !empty($hooks['changelog'])">
+                <p>#$hooks['changelog']#</p>
+            <xar:elseif condition="isset($checkouttime) and !empty($checkouttime)" />
+                <p>
+                    <xar:ml>
+                        <xar:mlstring>Updated: #(1)</xar:mlstring>
+                        <xar:mlvar>#xarLocaleFormatDate(' %d %b %y %H:%M', $checkouttime)#</xar:mlvar>
+                    </xar:ml>
+                </p>
+            </xar:if>
+            <xar:if condition="!empty($hooks) and !empty($hooks['keywords'])">
+                #$hooks['keywords']#
+            </xar:if>
+            <xar:if condition="!empty($prevart) || !empty($nextart)">
+                <div class="xar-padding-thick xar-margin-thick xar-clearleft xar-display-block">
+                   <xar:if condition="!empty($prevart)">
+                        <div class="xar-floatleft">
+                            <a href="#$prevart#">&lt;<xar:mlstring>prev</xar:mlstring></a>
+                        </div>
+                    </xar:if>
+                    <xar:if condition="!empty($nextart)">
+                        <div class="xar-floatright">
+                            <a href="#$nextart#"><xar:mlstring>next</xar:mlstring>&gt;</a>
+                        </div>
+                    </xar:if>
+                </div>
+                <br />
+            </xar:if>
+
+            <xar:if condition="!empty($hooks)">
+            <br />
+                <xar:foreach in="$hooks" key="$hookmodule">
+                    <xar:comment>
+                        We already have dealt with changelog display
+                    </xar:comment>
+                    <xar:if condition="$hookmodule ne 'changelog' and $hookmodule ne 'keywords'">
+                        #$hooks[$hookmodule]#
+                    </xar:if>
+                </xar:foreach>
+            </xar:if>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,282 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:set name="modInfo">xarModGetInfo(xarModGetIDFromName('articles'))</xar:set>
+<div class="xar-mod-page">
+    <div class="xar-mod-head">
+        <xar:if condition="!xarRequestIsAJAX()">
+          <xar:template type="module"  module="base" file="admin-menu" />
+        </xar:if>
+    </div>
+    <div class="xar-mod-body">
+        <h1>
+            <xar:mlstring>Overview</xar:mlstring>
+        </h1>
+        <div class="xar-mod-content">
+            <img class="xar-module-icon" src="#xarTplGetImage('admin.png','articles')#" alt="official icon" />
+
+            <h2>
+                <xar:mlstring>What is it?</xar:mlstring>
+            </h2>
+            <p>
+                <em>
+                    <xar:mlstring>
+                        Articles is a Xaraya Content Module responsible for the creation and handling of generic and complex content structures.
+                    </xar:mlstring>
+                </em>
+            </p>
+            <h2>
+                <xar:mlstring>How to use it?</xar:mlstring>
+            </h2>
+            <p>
+                <xar:mlstring>
+                    There are a number of Default 'publication' types installed when the module is installed. You can use these 'default' publication
+                    types or create new publication types with different fields. You can also extend the number of fields and field types with dynamic data,
+                    or add hooked functionality such as comments and ratings for a given publication type.
+                </xar:mlstring>
+            </p>
+            <h3>
+                <xar:mlstring>1. Publication types</xar:mlstring>
+            </h3>
+            <p>
+                <xar:mlstring>
+                    The articles module can manage 'articles' of different types at the same time, for instance news articles,
+                    longer documents in different sections, frequently asked questions, and so on.
+                </xar:mlstring>
+            </p>
+            <p>
+                <xar:mlstring>
+                    These types are called 'publication types', and each type of article can make use of a different set of
+                    data fields, with a different meaning for each data field. For example, the 'summary' field could be used
+                    for an Introduction in news articles, for providing some details about a question in FAQs, or not be used at
+                    all for section documents.
+                </xar:mlstring>
+            </p>
+            <p>
+                <xar:mlstring>
+                    There is a specific menu where you can manage those <strong>publication types</strong>,
+                    change the description that will appear in navigation menus, enable and disable data fields or
+                    change their meaning for a particular type, or even create or delete publication types according to your needs.
+                </xar:mlstring>
+            </p>
+            <p>
+                <xar:mlstring>
+                    Each publication type also has its own templates, so that you can customize the look &amp; feel of how
+                    each article will appear to your visitors.
+                </xar:mlstring>
+            </p>
+            <p>
+                <xar:mlstring>
+                    A default set of publication types and templates (corresponding to the old News, Sections and FAQs modules,
+                    if you're familiar with earlier versions of PostNuke or PHP-Nuke) is included as part of the installation.
+                </xar:mlstring>
+            </p>
+            <h3>
+                <xar:mlstring>2. Categories</xar:mlstring>
+            </h3>
+            <p>
+                <xar:mlstring>
+                    Articles (of any type) can be organised into categories. You could use one or more common categories across
+                    different publication types, or use specific categories for each type of article, or any combination that
+                    you might prefer for your site.
+                </xar:mlstring>
+            </p>
+            <p>
+                <xar:mlstring>
+                    Before you start specifying which article types will be using what categories, you should create the
+                    categorization you want via the <a href="index.php?module=categories&amp;type=admin">Categories</a>
+                    administration menu. A default set of categories has been defined for articles when you installed this module,
+                    as an example to get you started. (You can adapt the categories later on, of course.)
+                </xar:mlstring>
+            </p>
+            <p>
+                <xar:mlstring>
+                    Once you have a set of categories you would like to use for your articles, you can go to
+                    <strong>Articles Configuration</strong>, and specify the number of categories that can be used for each
+                    publication type, and the 'base categories' to be used.
+                </xar:mlstring>
+            </p>
+            <p>
+                <xar:mlstring>
+                    A 'base category' is any starting point somewhere in your tree of categories, below which you will have the
+                    actual list (or subtree) of categories people can choose from when they submit or view articles. For example,
+                    you could have a 'base category' called Topics, with a list of different topics relevant to your site below it,
+                     and another 'base category' called Cities, with a list of cities or places that you would provide regional
+                     news for.
+                </xar:mlstring>
+            </p>
+            <p>
+                <xar:mlstring>
+                    One topic might be 'Good Restaurants', and one city might 'Brussels', so people would be able to browse
+                    through any articles about good restaurants in Brussels, for instance.
+                </xar:mlstring>
+            </p>
+            <h3>
+                <xar:mlstring>3. Submitting or adding articles</xar:mlstring>
+            </h3>
+            <p>
+                <xar:mlstring>
+                   The status of an article determines if the article is published for viewing or held for some other process. Only persons
+                   with moderator level privileges or above for a given publication type can change the status of an article.
+                </xar:mlstring>
+            </p>
+            <p>
+                <xar:mlstring>
+                    Status can be any of the following:
+                </xar:mlstring>
+            </p>
+            <ul>
+                <li><xar:mlstring>Submitted: created but only viewable by those with Moderate level or above for approval or editing. Not available for display on the site</xar:mlstring></li>
+                <li><xar:mlstring>Rejected: will not display in any site view or display functions</xar:mlstring></li>
+                <li><xar:mlstring>Published: approved, and will be viewable in all user view  areas and functions (eg view, display, search)</xar:mlstring></li>
+                <li><xar:mlstring>Frontpage: approved and will be published direct to the site front page (if applicable for that publication type) as well as areas for Published status</xar:mlstring></li>
+                <li><xar:mlstring>Draft: Will only appear in admin management area</xar:mlstring></li>
+                <li><xar:mlstring>Archived: Will appear in admin management area, and in special 'archived' document areas for others if configured to do so. These archived documents do not appear in general view/display/searches on site.</xar:mlstring></li>
+            </ul>
+            <h3>
+                <xar:mlstring>4. Managing the overview and display of articles per publication type</xar:mlstring>
+            </h3>
+            <p>
+                <xar:mlstring>
+                    In <strong>Articles Configuration</strong>, set start view (list/browse), # of columns and items,
+                    show category links + # of comments (+ performance impact)
+                </xar:mlstring>
+            </p>
+            <p>
+                <xar:mlstring>
+                    + adapt specific templates!
+                </xar:mlstring>
+            </p>
+            <h3>
+                <xar:mlstring>5. Managing your 'front page'</xar:mlstring>
+            </h3>
+            <p>
+                <xar:mlstring>
+                    You can configure certain 'front page' attributes from the Configuration page for your pubtype (or general modify config area). Futher configuration can be done in the templates themselves.
+                </xar:mlstring>
+            </p>
+            <h3>
+                <xar:mlstring>6. Adding counters, ratings, comments, smilies, bb-code etc.</xar:mlstring>
+            </h3>
+            <p>
+                <xar:mlstring>
+                    You can hook other modules to articles, or specific publication types to extend functionality. Go to Modules - Configure Hooks - and select the hook module eg Comments, Ratings, Hit Counter, Change Log and so on. Then check the relevant radio buttons in the Article module area.
+                </xar:mlstring>
+            </p>
+            <h3>
+                <xar:mlstring>7. Organising permissions</xar:mlstring>
+            </h3>
+            <p>
+                <xar:mlstring>
+                    An article permission wizard is provided for permissions on specific publication types in the Privileges module.
+                </xar:mlstring>
+            </p>
+            <h3>
+                <xar:mlstring>8. Short URL support</xar:mlstring>
+            </h3>
+            <p>
+                <xar:mlstring>
+                    Globally enable/disable short urls in 'base' admin. Specific enable/disable in 'articles' admin + use of module aliases
+                </xar:mlstring>
+            </p>
+            <h2>
+                <xar:mlstring>Content Management Enhancements</xar:mlstring>
+            </h2>
+            <p>
+                <xar:mlstring>
+                    There are a number of features to assist when dealing with articles on a larger publication site:
+                </xar:mlstring>
+            </p>
+            <ul>
+                <li><xar:mlstring><strong>Check in - Check out functionality:</strong> turned on in the publication type configuration.
+                    This prevents editing of an article if it is 'checked out' for editing by someone already.
+                    When editing, the article must be 'checked in' to make it available to others for editing.</xar:mlstring>
+                </li>
+                <li> <xar:mlstring><strong>Draft status:</strong> This allows editors to work on documents that can easily be identified as 'draft'
+                    to moderators so they are not accidentally submitted and approved prior to completion. </xar:mlstring>
+                </li>
+                <li> <xar:mlstring><strong>Cloning:</strong> This allows editors to with permission to clone an article. This copies the item,
+                    including hooked content for the current article version, to a new document and displays it ready for editing/saving.
+                    To use cloning, and article pubtype must have a STATUS field.
+                    </xar:mlstring>
+                </li>
+                <li> <xar:mlstring><strong>Archiving:</strong> moderators can mark documents as archived.
+                    These archived documents might be out of date, or no longer relevant and no longer requiring any updates for use.
+                    No archive documents appear in any of the site view or display functions (including blocks, or search). URLS are not lost - instead
+                    an 'archived' message (which can be templated) is displayed to the user with the (admin configured) option to view or not view the document.
+                    The archived documents can be selectively shown to users with appropriate permission in an specific 'archive view/search' area.
+                    </xar:mlstring>
+                </li>
+                <li> <xar:mlstring><strong>Changelog:</strong> Hook the changelog module to Articles to enable a history of all edits to your documents.
+                    You can view prior revisions, editor, and restore a given revision if required.</xar:mlstring>
+                </li>
+                <li><xar:mlstring><strong>Publish to live:</strong> A draft document can be published to live as a 'new' document with its own ID and URL when the status is changed to 'approved' or 'frontpage', and this is what usually happens. Alternatively,
+                    the draft can be published to an existing document as a new version. If ChangeLog module is hooked, all prior versions are also retained.
+                    The draft document in this case is 'moved' to an existing document ID and URL and the old version is retained as a changelog version. Note that if Changelog is not installed and hooked, the old version will be lost.
+                    </xar:mlstring>
+                </li>
+
+
+            </ul>
+            <h2>
+                <xar:mlstring>Included Blocks</xar:mlstring>
+            </h2>
+            <ol>
+                <li>
+                    <xar:mlstring>featured items</xar:mlstring>
+                </li>
+                <li>
+                    <xar:mlstring>glossary</xar:mlstring>
+                </li>
+                <li>
+                    <xar:mlstring>random</xar:mlstring>
+                </li>
+                <li>
+                    <xar:mlstring>related</xar:mlstring>
+                </li>
+                <li>
+                    <xar:mlstring>top items</xar:mlstring>
+                </li>
+            </ol>
+            <h2>
+                <xar:mlstring>Included Hooks</xar:mlstring>
+            </h2>
+            <p>
+                <xar:mlstring>
+                    Search hook which provides the functionality to search your individual articles. Go to Modules - Configure Hooks - and select Articles module. Then look for Search module and select the radio button to turn on searching in articles.
+                </xar:mlstring>
+            </p>
+            <h2><xar:mlstring>Included Dynamic Data Properties</xar:mlstring></h2>
+            <ul>
+                <li><xar:mlstring>Status property -- Provides article status drop down selector</xar:mlstring></li>
+            </ul>
+
+            <h2>
+                <xar:mlstring>Further Information</xar:mlstring>
+            </h2>
+            <p>
+                <xar:mlstring>Further information on the Articles module can be found at</xar:mlstring>
+            </p>
+            <ol>
+                <xar:set name="extlink">'<a href="http://xarigami.com/project/xarigami_articles" title="'.xarML('Xarigami Articles Module - Extension 36').'">'.xarML('Xarigami Project').'</a>'</xar:set>
+                <li><xar:ml>
+                        <xar:mlstring>Xarigami Articles Project page at #(1).</xar:mlstring>
+                        <xar:mlvar>#$extlink#</xar:mlvar>
+                    </xar:ml>
+                </li>
+                <xar:set name="doclink">'<a href="http://xarigami.com/project/xarigami_articles?page=resources" title="'.xarML('Related documentation on Xarigami Articles').'">'.xarML('Xarigami Resources').'</a>'</xar:set>
+                <li><xar:ml>
+                        <xar:mlstring>Related tutorials and documentation on Example found at #(1). </xar:mlstring>
+                        <xar:mlvar>#$doclink#</xar:mlvar>
+                    </xar:ml>
+                </li>
+            </ol>
+            <p class="xar-sub">
+                <xar:ml>
+                    <xar:mlstring>
+                        Xarigami Articles Module Overview 2010-06-05 Revision 1.2.0 for Xarigami Articles V#(1)
+                    </xar:mlstring>
+                    <xar:mlvar>#$modInfo.version#</xar:mlvar>
+                </xar:ml>
+            </p>
+        </div>
+    </div>
+</div>

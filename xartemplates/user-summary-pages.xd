@@ -1,0 +1,18 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<li>
+    <xar:if condition="!empty($categories) and count($categories) gt 0">
+        [ <xar:foreach in="$categories" value="$cat">
+            #$cat['cjoin']# <a href="#$cat['clink']#">#$cat['cname']#</a>
+        </xar:foreach> ]
+    </xar:if>
+    <a class="xar-title" href="#$link#">#$title#</a>
+    <xar:if condition="!empty($counter)">
+        <xar:if condition="$counter eq 1">
+            (#$counter#&nbsp;<xar:mlstring>read</xar:mlstring>)
+        <xar:else />
+            (#$counter#&nbsp;<xar:mlstring>reads</xar:mlstring>)
+        </xar:if>
+    </xar:if>
+    <br />&nbsp;
+</li>
+

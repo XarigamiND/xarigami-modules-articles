@@ -1,0 +1,22 @@
+<xar:if condition="!empty($showpublinks)">
+<xar:comment>show a link to all publication types </xar:comment>
+#$publabel# :
+<xar:foreach in="$publinks" value="$publink">
+    #$publink['pubjoin']#
+    <xar:if condition="empty($publink['publink'])">
+        #$publink['pubtitle']#
+        <xar:else />
+            <a href="#$publink['publink']#">#$publink['pubtitle']#</a>
+    </xar:if>
+    <xar:if condition="!empty($publink['pubcount'])">
+        (#$publink['pubcount']#)
+    </xar:if>
+</xar:foreach>
+<xar:else />
+<xar:comment>show the title for the current publication type </xar:comment>
+<xar:foreach in="$publinks" value="$publink">
+    <xar:if condition="$publink['pubid'] eq $ptid">
+        #$publink['pubtitle']#
+    </xar:if>
+</xar:foreach>
+</xar:if>

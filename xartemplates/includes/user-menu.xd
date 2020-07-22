@@ -1,0 +1,16 @@
+<xar:comment>Common User menu/head called by user-view.xd and display-view.xd</xar:comment>
+<xar:if condition="!isset($ispreview) or !$ispreview">
+    <xar:if condition="xarModGetVar('themes','showusermodheader')">
+        <xar:set name="outputpublinks"><xar:template file="publinks" type="module" /></xar:set>
+        <div class="xar-mod-title">
+            <xar:if condition="trim(strip_tags($outputpublinks)) ne ''">
+            #$outputpublinks#
+            <xar:else />
+            <xar:mlstring>Articles</xar:mlstring>
+            </xar:if>
+        </div>
+    </xar:if>
+    <xar:template file="user-breadcrumb" type="module" />
+    #xarTplGetMessage()#
+    <xar:template file="navtabs-user" type="module" />
+</xar:if>

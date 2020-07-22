@@ -1,0 +1,110 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:base-include-javascript libname="jquery" libfile="jquery.min" position="head"/>
+<xar:set name="searchcode">"
+jQuery(document).ready(function(){
+    jQuery('input#filterbycat, input#filterbycat2, input#[id^=ptids]').change(function() { this.form.submit(); });
+});
+"</xar:set>
+<xar:base-include-javascript type="code" code="$searchcode" position="body"/>
+<xar:set name="fulltext">xarModGetVar('articles', 'fulltextsearch')</xar:set>
+<xar:if condition="!empty($fulltext)">
+    <xar:set name="fulltextfields">explode(',',$fulltext)</xar:set>
+</xar:if>
+<xar:if condition="empty($ishooked)">
+    <xar:comment>A full page search function for articles - unhooked</xar:comment>
+<div class="xar-mod-page">
+    <div class="xar-mod-head">
+        <xar:template file="user-breadcrumb" type="module" module="base" />
+    </div>
+        <div class="xar-mod-body">
+            <xar:if condition="!empty($ptid) or !empty($catid)">
+                <xar:categories-navigation layout="trails" showchildren="1" module="articles" itemtype="$ptid" catid="$catid" showcatcount="$showcatcount" showempty="1" />
+            </xar:if>
+            <h1><xar:mlstring>Search articles</xar:mlstring></h1>
+            <div class="xar-mod-content">
+                <form method="post" action="#xarModURL('articles','user','search')#">
+                    <xar:template file="search-form" module="articles" />
+                </form>
+                <xar:if condition="is_array($results) and !empty($results)">
+                    <h2><xar:mlstring>Articles search results</xar:mlstring></h2>
+                    <xar:foreach in="$results" value="$result">
+
+                        <h3>
+                            #$result['description']#:
+                        </h3>
+                        <ul>
+                            <xar:foreach in="$result['items']" value="$item">
+                                <li>
+                                    <xar:if condition="!empty($item['categories']) and count($item['categories']) gt 0">
+                                        [
+                                        <xar:foreach in="$item['categories']" value="$cat">
+                                            #$cat['cjoin']# <a href="#$cat['clink']#">#$cat['cname']#</a>
+                                        </xar:foreach>
+                                        ]
+                                    </xar:if>
+                                    <a href="#$item['link']#">#$item['title']#</a>
+                                    <xar:if condition="!empty($item['pubdate'])">
+                                        #xarLocaleFormatDate('%a, %d %B %Y %H:%M:%S %Z', $item['pubdate'])#
+                                    </xar:if>
+                                    <xar:comment>
+                                        Show relevance for MySQL full-text search (see $getfields in search.php)
+                                        <xar:if condition="isset($item['relevance'])">
+                                            <xar:set name="relevance">sprintf('%.2f',$item['relevance'])</xar:set>
+                                            [#$relevance#]
+                                        </xar:if>
+                                    </xar:comment>
+                                </li>
+                            </xar:foreach>
+                        </ul>
+                        #$result['pager']#
+                    </xar:foreach>
+                </xar:if>
+                <xar:if condition="!empty($status)">
+                  <p>#$status#</p>
+                </xar:if>
+            </div>
+        </div>
+    </div>
+<xar:else />
+<xar:comment>A part page search output when articles is hooked to search</xar:comment>
+    <div class="search">
+        <h1><xar:mlstring>Search articles</xar:mlstring></h1>
+        <xar:template file="search-form" module="articles" />
+        <xar:if condition="is_array($results) and !empty($results)">
+            <h2><xar:mlstring>Articles search results</xar:mlstring></h2>
+            <xar:foreach in="$results" value="$result">
+                <h3>
+                    #$result['description']#:
+                </h3>
+                <ul>
+                    <xar:foreach in="$result['items']" value="$item">
+                        <li>
+                            <xar:if condition="!empty($item['categories']) and count($item['categories']) gt 0">
+                                [
+                                <xar:foreach in="$item['categories']" value="$cat">
+                                    #$cat['cjoin']# <a href="#$cat['clink']#">#$cat['cname']#</a>
+                                </xar:foreach>
+                                ]
+                            </xar:if>
+                            <a href="#$item['link']#">#$item['title']#</a>
+                            <xar:if condition="!empty($item['pubdate'])">
+                                #xarLocaleFormatDate('%a, %d %B %Y %H:%M:%S %Z', $item['pubdate'])#
+                            </xar:if>
+                            <xar:comment>
+                                Show relevance for MySQL full-text search (see $getfields in search.php)
+                                <xar:if condition="isset($item['relevance'])">
+                                    <xar:set name="relevance">sprintf('%.2f',$item['relevance'])</xar:set>
+                                    [#$relevance#]
+                                </xar:if>
+                            </xar:comment>
+                        </li>
+                    </xar:foreach>
+                </ul>
+                #$result['pager']#
+            </xar:foreach>
+        </xar:if>
+        <xar:if condition="!empty($status)">
+          <p>#$status#</p>
+        </xar:if>
+    </div>
+</xar:if>

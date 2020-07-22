@@ -1,0 +1,41 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<div class="xar-mod-page">
+    <div class="xar-mod-head">
+        <xar:if condition="!xarRequestIsAJAX()">
+          <xar:template type="module"  module="base" file="admin-menu" />
+        </xar:if>
+    </div>
+    <div class="xar-mod-body">
+        <h1><xar:mlstring>Manage publication types</xar:mlstring></h1>
+        <div class="xar-mod-content">
+            <h2>
+                <xar:mlstring>Import Definition of Publication Type</xar:mlstring>
+            </h2>
+            <p class="xar-form-input-wrapper xar-message-error">#$warning#</p>
+            <form method="post" id="articles-admin-importpubtype" action="#xarModURL('articles','admin','importpubtype')#">
+                <div class="xar-form-input-wrapper">
+                    <label class="xar-form-label"><xar:mlstring>Filter</xar:mlstring>:</label>
+                    <strong>modules/articles/*.xml</strong>
+                </div>
+                <div class="xar-form-input-wrapper">
+                    <label class="xar-form-label"><xar:mlstring>File</xar:mlstring>:</label>
+                    <select name="import" id="import">
+                    <xar:foreach in="$options" value="$option">
+                        <option value="#$option['id']#">#$option['name']#</option>
+                    </xar:foreach>
+                    </select>
+                </div>
+                <div class="xar-form-input-wrapper-after">
+                    <input type="submit" value="#xarML('Import Definition')#" />
+                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                </div>
+                <div class="xar-form-input-wrapper">
+                    <label class="xar-form-label">
+                        <xar:mlstring>Select a file in the list above, or paste the definition in here</xar:mlstring>:
+                    </label>
+                   <textarea name="xml" id="xml" rows="30" cols="80"></textarea>
+                 </div>
+            </form>
+        </div>
+    </div>
+</div>

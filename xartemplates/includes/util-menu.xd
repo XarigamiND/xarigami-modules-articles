@@ -1,0 +1,34 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:comment>Common Administration menu</xar:comment>
+<xar:style scope="module" module="base" file="tabs" />
+<xar:set name="request">xarRequestGetInfo()</xar:set>
+<xar:set name="activetab">#$request.2#</xar:set>
+<xar:set name="activetype">#$request.1#</xar:set>
+<div>
+  <ul class="xar-tabs">
+    <li class="xar-tabs-label" title="Choose an action to perform">
+      <xar:mlstring>Utility:</xar:mlstring>
+    </li>
+    <xar:sec mask="AdminArticles" catch="false">
+        <xar:set name="tabclass">$activetab=='stats'?'xar-tab-active':'xar-tab'</xar:set>
+        <li class="#$tabclass#">
+          <a href="&xar-modurl-articles-admin-stats;">
+            <xar:mlstring>Statistics</xar:mlstring>
+          </a>
+        </li>
+        <xar:set name="tabclass">$activetab=='importpictures'?'xar-tab-active':'xar-tab'</xar:set>
+        <li class="#$tabclass#">
+          <a href="&xar-modurl-articles-admin-importpictures;">
+            <xar:mlstring>Import Pictures</xar:mlstring>
+          </a>
+        </li>
+        <xar:set name="tabclass">$activetab=='importpagess'?'xar-tab-active':'xar-tab'</xar:set>
+         <li class="#$tabclass#">
+          <a href="&xar-modurl-articles-admin-importpages;">
+            <xar:mlstring>Import Pages</xar:mlstring>
+          </a>
+        </li>
+
+    </xar:sec>
+  </ul>
+</div>

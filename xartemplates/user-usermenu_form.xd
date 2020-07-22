@@ -1,0 +1,46 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:base-include-javascript module="base" filename="toggle.js" />
+<div class="xar-mod-body">
+    <div class="xar-norm-outline xar-standard-box-padding xar-clearleft">
+        <h3>
+
+            <xar:mlstring>My Articles</xar:mlstring>
+
+        </h3>
+
+        <xar:if condition="!empty($articlelist)">
+           <xar:foreach in="$articlelist" key="$pubtype" value="$articles">
+           <xar:if condition="count($articles) gt 0">
+                <h4>
+                    <a href="javascript:void(0);" title="#xarML('Click to toggle visibility for publication types')#" onclick="return toggleDisplay('fieldwrapper_#$pubtypes[$pubtype]['name']#');">
+                        #$pubtypes[$pubtype]['name']#
+                        <span class="xar-sub"><img class="xar-icon" src="#xarTplGetImage('icons/toggle.png','base')#" alt="#xarML('(Toggle display)')#" title="#xarML('(Toggle display)')#" /></span>
+                     </a>
+                </h4>
+                <xar:set name="published">array(2,3)</xar:set>
+                <ul id="fieldwrapper_#$pubtypes[$pubtype]['name']#"  style="display:none;">
+                    <xar:foreach in="$articles" key="$k" value="$article" >
+                    <li>
+                        <xar:set name="publishdate">xarLocaleGetFormattedDate('medium',$article['pubdate'])</xar:set>
+                      <xar:if condition="in_array($article['status'], $published)">
+                        <a href="#$article['link']#">#$article['title']#</a> - [#$publishdate#] #$articlestatus[$article['status']]#
+                      <xar:else />
+                        #$article['title']# - [#$publishdate#] #$articlestatus[$article['status']]#
+                      </xar:if>
+
+                      <xar:if condition="xarSecurityCheck('EditArticles',0,'Article',$pubtype.':All:All:All')">
+                            <span class="xar-sub"><a href="#xarModURL('articles','admin','modify',array('aid'=>$article['aid']))#">Edit</a></span>
+                      </xar:if>
+                    </li>
+                    </xar:foreach>
+                </ul>
+                </xar:if>
+           </xar:foreach>
+
+       <xar:else />
+           <p><xar:mlstring>You do not have any articles published or pending at this time.</xar:mlstring></p>
+       </xar:if>
+
+    </div>
+</div>
+

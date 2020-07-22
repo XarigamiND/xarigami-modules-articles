@@ -1,0 +1,23 @@
+<xar:style scope="module" module="base" file="tabs" />
+<xar:if condition="!empty($maplink) or !empty($monthviewlink) or !empty($submitlink)">
+    <ul class="xar-tabs">
+        <xar:if condition="!empty($maplink)">
+            <li class="xar-tab">
+                <a href="#$maplink#">#$maplabel#</a>
+            </li>
+        </xar:if>
+        <xar:if condition="!empty($submitlink)">
+        
+            <li class="xar-tab">
+                <a href="#$submitlink#" title="Submit Article">
+                    <xar:mlstring>Contribute</xar:mlstring>
+                </a>
+            </li>
+        </xar:if>
+        <xar:if condition="!empty($monthviewlink)">
+            <li class="xar-tab">
+                <a href="#$monthviewlink#">#$monthviewlabel# </a>
+            </li>
+        </xar:if>
+    </ul>
+</xar:if>

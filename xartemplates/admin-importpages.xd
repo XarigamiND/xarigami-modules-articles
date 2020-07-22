@@ -1,0 +1,179 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<xar:base-include-javascript libname="jquery" libfile="jquery.min" position="body"/>
+<xar:set name="importpagescode">"
+jQuery(document).ready(function(){
+    jQuery('form#selectpages select#ptid').change(function() { this.form.submit(); });
+
+});
+"</xar:set>
+<xar:base-include-javascript type="code" code="$importpagescode" position="body"/>
+<div class="xar-mod-page">
+    <div class="xar-mod-head">
+        <xar:if condition="!xarRequestIsAJAX()">
+          <xar:template type="module"  module="base" file="admin-menu" />
+        </xar:if>
+    </div>
+    <div class="xar-mod-body">
+        <h1>
+            <xar:mlstring>Utilities</xar:mlstring>
+        </h1>
+        <xar:template type="module" file="util-menu" />
+        <div class="xar-mod-content">
+            <h2>
+                <xar:mlstring>Import Web Pages</xar:mlstring>
+            </h2>
+            <xar:if condition="!empty($logfile)">
+                <div class="xar-outline xar=padding-thick" style="overflow-x: scroll;">
+                    #$logfile#
+                </div>
+            </xar:if>
+            <form method="post" id="selectpages" action="#xarModURL('articles','admin','importpages')#">
+                <div class="xar-form-input-wrapper">
+                    <label for="basedir" class="xar-form-label">
+                        <xar:mlstring>Base Directory:</xar:mlstring>
+                    </label>
+                    <input type="text" name="basedir" id="basedir" value="#$basedir#" size="50" maxlength="250" />
+                    <input type="submit" name="refresh" id="refresh" value="#xarML('Refresh')#" />
+                </div>
+                <div class="xar-form-input-wrapper">
+                    <label for="filelist[]" class="xar-form-label">
+                        <xar:mlstring>Available HTML Pages:</xar:mlstring>
+                    </label>
+                    <xar:if condition="count($filelist) eq 0">
+                        <xar:mlstring>No web pages at specified location</xar:mlstring>
+                        <input type="hidden" name="filelist[]" id="picture_filelist" />
+                    <xar:else />
+                        <select name="filelist[]" id="filelist[]" multiple="multiple">
+                            <option value=""></option>
+                            <xar:foreach in="$filelist" value="$file">
+                                <xar:if condition="!empty($selected[$file])">
+                                    <option value="#$file#" selected="selected">#$file#</option>
+                                    <xar:else />
+                                    <option value="#$file#">#$file#</option>
+                                </xar:if>
+                            </xar:foreach>
+                        </select>
+                    </xar:if>
+                </div>
+                <div class="xar-form-input-wrapper">
+                    <label for="ptid" class="xar-form-label">
+                        <xar:mlstring>Publication Type:</xar:mlstring>
+                    </label>
+                    <select name="ptid" id="ptid">
+                        <option value=""></option>
+                        <xar:foreach in="$pubtypes" key="$pubid" value="$pubtype">
+                            <xar:if condition="!empty($ptid) and $pubid eq $ptid">
+                                <option value="#$pubid#" selected="selected">#$pubtype['descr']#</option>
+                                <xar:else />
+                                <option value="#$pubid#">#$pubtype['descr']#</option>
+                            </xar:if>
+                        </xar:foreach>
+                    </select>
+                </div>
+                <xar:if condition="count($fields) gt 0">
+                    <div class="xar-form-input-wrapper">
+                        <label for="title" class="xar-form-label">
+                            <xar:mlstring>Insert Page Title into Field:</xar:mlstring>
+                        </label>
+                        <select name="title" id="title">
+                            <option value=""></option>
+                            <xar:foreach in="$fields" key="$field" value="$label">
+                                <xar:if condition="!empty($title) and $title eq $field">
+                                    <option value="#$field#" selected="selected">#$label#</option>
+                                <xar:else />
+                                    <option value="#$field#">#$label#</option>
+                                </xar:if>
+                            </xar:foreach>
+                        </select>
+                    </div>
+                    <div class="xar-form-input-wrapper">
+                        <label for="content" class="xar-form-label">
+                            <xar:mlstring>Insert Content into Field:</xar:mlstring>
+                        </label>
+                        <select name="content" id="content">
+                            <option value=""></option>
+                            <xar:foreach in="$fields" key="$field" value="$label">
+                                <xar:if condition="!empty($content) and $content eq $field">
+                                    <option value="#$field#" selected="selected">#$label#</option>
+                                <xar:else />
+                                    <option value="#$field#">#$label#</option>
+                                </xar:if>
+                            </xar:foreach>
+                        </select>
+                    </div>
+                </xar:if>
+                <xar:if condition="count($cats) gt 0">
+                    <div class="xar-form-input-wrapper">
+                        <label class="xar-form-label">
+                            <xar:mlstring>Initial Categories:</xar:mlstring>
+                        </label>
+                        <xar:foreach in="$cats" key="$catid">#$cats[$catid]#</xar:foreach>
+                    </div>
+                </xar:if>
+                <div class="xar-form-input-wrapper">
+                    <label for="filterhead" class="xar-form-label">
+                        <xar:mlstring>Filter Start of Page:</xar:mlstring>
+                    </label>
+                    <input type="text" name="filterhead" id="filterhead" value="#$filterhead#" size="30" maxlength="100" />
+                </div>
+                <div class="xar-form-input-wrapper">
+                    <label for="filtertail" class="xar-form-label">
+                        <xar:mlstring>Filter End of Page:</xar:mlstring>
+                    </label>
+                    <input type="text" name="filtertail" id="filtertail" value="#$filtertail#" size="30" maxlength="100" />
+                </div>
+                <div class="xar-form-input-wrapper">
+                    <label for="findtitle" class="xar-form-label">
+                        <xar:mlstring>Find Page Title:</xar:mlstring>
+                    </label>
+                    <input type="text" name="findtitle" id="findtitle" value="#$findtitle#" size="30" maxlength="100" />
+                </div>
+                <h3>
+                    <xar:mlstring>Replacement Rules</xar:mlstring>
+                </h3>
+                <xar:foreach in="$search" key="$id">
+                    <fieldset>
+                        <legend>
+                            <xar:set name="r">$id + 1</xar:set>
+                            <xar:ml>
+                                <xar:mlstring>Rule ##(1)</xar:mlstring>
+                                <xar:mlvar>#$r#</xar:mlvar>
+                            </xar:ml>
+                        </legend>
+                        <div class="xar-form-input-wrapper">
+                            <label for="search_#$id#" class="xar-form-label">
+                                <xar:mlstring>Search for:</xar:mlstring>
+                            </label>
+                            <input type="text" name="search[#$id#]" id="search_#$id#" value="#$search[$id]#" size="20" />
+                        </div>
+                        <div class="xar-form-input-wrapper">
+                            <label for="replace_#$id#" class="xar-form-label">
+                                <xar:mlstring>Replace with:</xar:mlstring>
+                            </label>
+                            <input type="text" name="replace[#$id#]" id="replace_#$id#" value="#$replace[$id]#" size="20" />
+                        </div>
+                    </fieldset>
+                </xar:foreach>
+
+                <div class="xar-form-footer">
+                    <!-- not used the first time you hit this page -->
+                    <input type="hidden" name="numrules" value="3" />
+
+                    <input type="hidden" name="authid" id="authid" value="#$authid#" />
+                    <input type="submit" name="test" id="test" value="#xarML('Test Import')#" class="xar-margin-thickright" />
+                    <input type="submit" name="import" id="import" value="#xarML('Import Webpages')#" class="xar-margin-thickleft" />
+                </div>
+            </form>
+            <xar:if condition="!empty($preview)">
+                <h3>
+                    <xar:mlstring>Preview of the first web page</xar:mlstring>
+                </h3>
+                <hr />
+                <div class="xar-fullwidth">
+                    #$preview#
+                </div>
+                <hr />
+            </xar:if>
+        </div>
+    </div>
+</div>

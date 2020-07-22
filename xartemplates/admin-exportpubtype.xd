@@ -1,0 +1,26 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<div class="xar-mod-page">
+    <div class="xar-mod-head">
+        <xar:if condition="!xarRequestIsAJAX()">
+             <xar:template type="module"  module="base" file="admin-menu" />
+        </xar:if>
+    </div>
+    <div class="xar-mod-body">
+        <h1>
+            <xar:mlstring>Publication Types</xar:mlstring>
+        </h1>
+        <div class="xar-mod-content">
+            <h3>
+                <xar:ml>
+                    <xar:mlstring>Export Definition for #(1)</xar:mlstring>
+                    <xar:mlvar>#$descr#</xar:mlvar>
+                </xar:ml>
+            </h3>
+            <form>
+                <p>
+                    <textarea name="xml" rows="30" cols="80">#$xml#</textarea>
+                </p>
+            </form>
+        </div>
+    </div>
+</div>

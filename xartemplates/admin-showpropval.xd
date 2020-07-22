@@ -1,0 +1,67 @@
+<xar:comment>License: GPL http://www.gnu.org/copyleft/gpl.html</xar:comment>
+<div class="xar-mod-page">
+    <div class="xar-mod-head">
+        <xar:if condition="!xarRequestIsAJAX()">
+          <xar:template type="module"  module="base" file="admin-menu" />
+        </xar:if>
+    </div>
+    <div class="xar-mod-body">
+        <div class="xar-mod-content">
+            <h2>
+                <xar:ml>
+                    <xar:mlstring>
+                        Configuration for #(1) in #(2)
+                    </xar:mlstring>
+                    <xar:mlvar>
+                        #$label#
+                    </xar:mlvar>
+                    <xar:mlvar>
+                        #$item['descr']#
+                    </xar:mlvar>
+                </xar:ml>
+            </h2>
+            <xar:if condition="!empty($isupload)">
+                <xar:set name="enc_type">
+                    'multipart/form-data'
+                </xar:set>
+                <xar:else />
+                <xar:set name="enc_type">
+                    'application/x-www-form-urlencoded'
+                </xar:set>
+            </xar:if>
+            <form method="post" id="articles-admin-showproval" action="#xarModURL('articles', 'admin', 'showpropval')#" enctype="#$enc_type#">
+                <fieldset>
+                    <legend><xar:mlstring>Configuration settings for:</xar:mlstring></legend>
+                    <div class="xar-form-input-wrapper">
+                        <label class="xar-form-label">
+                            <xar:mlstring>Name:</xar:mlstring>
+                        </label>
+                        #$name#
+                    </div>
+                    <div class="xar-form-input-wrapper">
+                        <label class="xar-form-label">
+                            <xar:mlstring>Label:</xar:mlstring>
+                        </label>
+                        #$label#
+                    </div>
+                    <div class="xar-form-input-wrapper">
+                        <label class="xar-form-label">
+                            <xar:mlstring>Property type:</xar:mlstring>
+                        </label>
+                        <xar:data-output type="fieldtype" value="$type" />
+                    </div>
+                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#" />
+                    <input type="hidden" name="ptid" id="ptid" value="#$ptid#" />
+                    <input type="hidden" name="field" id="field" value="#$field#" />
+                </fieldset>
+                 <div class="xar-form-input-wrapper">
+                            #$showval#
+                </div>
+                <div class="xar-form-footer">
+                     <input type="submit" name="preview" value="#xarML('Preview')#" />
+                     &#160; &#160;<input type="submit" name="confirm" value="#xarML('Update')#" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

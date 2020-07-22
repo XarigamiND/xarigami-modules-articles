@@ -1,0 +1,16 @@
+<xar:if condition="!empty($pubtypelink)">
+<a href="#$pubtypelink#"><xar:ml><xar:mlstring>More #(1)</xar:mlstring><xar:mlvar>#xarVarPrepForDisplay($pubtypename)#</xar:mlvar></xar:ml></a>
+<br /><br />
+</xar:if>
+<xar:if condition="!empty($authorlink)">
+  <xar:if condition="!empty($pubtypename)">
+<a href="#$authorlink#"><xar:ml><xar:mlstring>#(1) by #(2)</xar:mlstring><xar:mlvar>#xarVarPrepForDisplay($pubtypename)#</xar:mlvar><xar:mlvar>#xarVarPrepForDisplay($authorname)#</xar:mlvar></xar:ml></a>
+  <xar:else/>
+<a href="#$authorlink#"><xar:ml><xar:mlstring>Articles by #(1)</xar:mlstring><xar:mlvar>#xarVarPrepForDisplay($authorname)#</xar:mlvar></xar:ml></a>
+  </xar:if>
+<xar:if condition="!empty($authorcount)">
+(#$authorcount#)
+</xar:if>
+<br /><br />
+</xar:if>
+

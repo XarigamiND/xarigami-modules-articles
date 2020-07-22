@@ -1,0 +1,28 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<table border="0" cellpadding="5" cellspacing="0" width="100%">
+    <tr>
+        <td align="left" valign="top" class="xar-normal">
+            <xar:if condition="!empty($categories) and count($categories) gt 0">
+                [ <xar:foreach in="$categories" value="$cat">
+                    #$cat['cjoin']# <a href="#$cat['clink']#">#$cat['cname']#</a>
+                </xar:foreach> ]
+            </xar:if>
+            <a class="xar-title" href="#$link#">#$title#</a><br />
+            <xar:mlstring>Description</xar:mlstring>: #$summary#<br />
+            <xar:mlstring>Added on</xar:mlstring>:
+            #xarLocaleGetFormattedDate('long',$pubdate)#
+            #xarLocaleGetFormattedTime('long',$pubdate)#
+            <xar:if condition="!empty($rating)">
+                - <xar:mlstring>Rating</xar:mlstring>: #$rating#
+            </xar:if>
+            <xar:if condition="!empty($counter)">
+                <xar:if condition="$counter eq 1">
+                    (#$counter#&nbsp;<xar:mlstring>read</xar:mlstring>)
+                <xar:else />
+                    (#$counter#&nbsp;<xar:mlstring>reads</xar:mlstring>)
+                </xar:if>
+            </xar:if>
+            | <a href="#$link#"><xar:mlstring>Rate / Comment</xar:mlstring></a>
+        </td>
+    </tr>
+</table>

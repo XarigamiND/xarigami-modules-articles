@@ -1,0 +1,35 @@
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<div class="xar-error">
+    <p>
+        <xar:mlstring>
+            <strong>Note:</strong> when you create a new publication type,
+            the articles module will automatically use the templates
+            <em>user-display-[publicationtype].xd</em>
+            and <em>user-summary-[publicationtype].xd</em>.
+            If those templates do not exist when you try to preview or display a new article,
+            you'll get this warning :-)
+        </xar:mlstring>
+        <xar:mlstring>
+            Please place your own templates in themes/<em>yourtheme</em>/modules/articles . These templates
+            should have the extension .xt there.
+        </xar:mlstring>
+    </p>
+</div>
+<div class="xar-norm xar-standard-box-padding">
+    <h1><a href="#$link#">#$title#</a></h1>
+    <xar:if condition="isset($author)">
+    <p>#$author#</p>
+    </xar:if>
+    <xar:if condition="isset($pubdate)">
+    <p>
+        <xar:ml>
+            <xar:mlstring>#(1) #(2)</xar:mlstring>
+            <xar:mlvar>#xarLocaleGetFormattedDate('long',$pubdate)#</xar:mlvar>
+            <xar:mlvar>#xarLocaleGetFormattedTime('long',$pubdate)#</xar:mlvar>
+        </xar:ml>
+    </p>
+    </xar:if>
+    <xar:if condition="isset($summary)">
+    <p>#$summary#</p>
+    </xar:if>
+</div>

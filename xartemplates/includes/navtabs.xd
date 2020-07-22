@@ -1,0 +1,21 @@
+<xar:style scope="module" module="base" file="tabs" />
+<ul class="xar-tabs">
+    <li class="xar-tabs-label">
+        <xar:mlstring>Select Publication:</xar:mlstring>
+    </li>
+    <xar:foreach in="$pubfilters" value="$pubfilter">
+        <xar:if condition="empty($pubfilter['plink'])">
+            <li class="xar-tab-active">
+                 <a href="#xarServerGetCurrentURL()#" title="#$pubfilter['ptitle']#">
+                    #$pubfilter['ptitle']#
+                </a>
+            </li>
+        <xar:else />
+              <li class="xar-tab">
+                 <a href="#$pubfilter['plink']#" title="#$pubfilter['ptitle']#">
+                    #$pubfilter['ptitle']#
+                </a>
+            </li>
+        </xar:if>
+    </xar:foreach>
+</ul>
