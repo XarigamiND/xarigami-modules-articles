@@ -36,7 +36,7 @@ class Dynamic_Status_Property extends Dynamic_Select_Property
         parent::__construct($args);
 
         $this->filepath   = 'modules/articles/xarproperties';
-        if (count($this->options) == 0) {
+        if (!isset($this->options) || count($this->options) == 0) {
             $states = xarModAPIFunc('articles','user','getstates');
             $this->options = array();
             foreach ($states as $id => $name) {
