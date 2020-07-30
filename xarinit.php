@@ -798,10 +798,10 @@ function updateFileGroupValidations($fieldtype, $validation)
                         if ($option_type == 'show') {
                             $showlist = explode(',', $option_value);
                             // Remove invalid elements (fields that are not valid).
-                            $showfilter = create_function(
-                                '$a', 'return preg_match(\'/^[-]?(name|uname|email|uid|state|date_reg)$/\', $a);'
-                            );
-                             $defaultval['xv_showfields'] = array_filter($showlist, $showfilter);
+                            $showfilter = function($a) {
+                               return preg_match('/^[-]?(name|uname|email|uid|state|date_reg)$/', $a);
+                            };
+                            $defaultval['xv_showfields'] = array_filter($showlist, $showfilter);
                         }
                         if ($option_type == 'order') {
                              $defaultval['xv_orderlist'] = explode(',', $option_value);
