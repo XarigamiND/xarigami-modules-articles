@@ -84,11 +84,8 @@ function articles_user_monthview($args)
 // QUESTION: work with user-dependent time settings or not someday ?
     // Set the start and end date for that month
     if (!empty($month) && preg_match('/^(\d{4})-(\d+)$/',$month,$matches)) {
-        //is_dst parameter deprecated at 5.1
-        //$startdate = gmmktime(0,0,0,$matches[2],1,$matches[1],0);
         $startdate = gmmktime(0,0,0,$matches[2],1,$matches[1]);
         // PHP allows month > 12 :-)
-        //$enddate = gmmktime(0,0,0,$matches[2]+1,1,$matches[1],0);
         $enddate = gmmktime(0,0,0,$matches[2]+1,1,$matches[1]);
         if ($enddate > time()) {
             $enddate = time();
