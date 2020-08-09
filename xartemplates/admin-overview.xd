@@ -252,23 +252,11 @@
             <h2>
                 <xar:mlstring>Further Information</xar:mlstring>
             </h2>
-            <p>
-                <xar:mlstring>Further information on the Articles module can be found at</xar:mlstring>
-            </p>
-            <ol>
-                <xar:set name="extlink">'<a href="http://xarigami.com/project/xarigami_articles" title="'.xarML('Xarigami Articles Module - Extension 36').'">'.xarML('Xarigami Project').'</a>'</xar:set>
-                <li><xar:ml>
-                        <xar:mlstring>Xarigami Articles Project page at #(1).</xar:mlstring>
-                        <xar:mlvar>#$extlink#</xar:mlvar>
-                    </xar:ml>
-                </li>
-                <xar:set name="doclink">'<a href="http://xarigami.com/project/xarigami_articles?page=resources" title="'.xarML('Related documentation on Xarigami Articles').'">'.xarML('Xarigami Resources').'</a>'</xar:set>
-                <li><xar:ml>
-                        <xar:mlstring>Related tutorials and documentation on Example found at #(1). </xar:mlstring>
-                        <xar:mlvar>#$doclink#</xar:mlvar>
-                    </xar:ml>
-                </li>
-            </ol>
+            <ul>
+                <li><a href="http://xarigami.org/project/xarigami_articles"><xar:mlstring>Xarigami Articles project page</xar:mlstring></a></li>
+                <li><a href="http://xarigami.org/contrails/displayproject/xart"><xar:mlstring>Xarigami Articles issue tracker</xar:mlstring></a></li>
+                <li><a href="http://xarigami.org/keywords/articles"><xar:mlstring>Related articles</xar:mlstring></a></li>
+            </ul>
             <p class="xar-sub">
                 <xar:ml>
                     <xar:mlstring>
