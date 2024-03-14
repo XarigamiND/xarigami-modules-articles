@@ -44,7 +44,7 @@ function articles_admin_view($args)
     extract($args);
 
     $pubtypes = xarModAPIFunc('articles','user','getpubtypes');
-    $oldlastview = @unserialize(xarSessionGetVar('Articles.LastView'));
+    $oldlastview = @unserialize(xarSessionGetVar('Articles.LastView') ?? '');
 
     $sort  = isset($sort) && !empty($sort) ?$sort : 'pubdate' ;
     $order = isset($sort) && !empty($order) ? $order :'DESC';
