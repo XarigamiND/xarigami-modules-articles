@@ -73,6 +73,7 @@ function articles_userapi_encode_shorturl($args)
 
     // specify some short URLs relevant to your module
     if ($func == 'main') {
+        // / ( frontpage | articles ) /
         $alias = xarModGetAlias('frontpage');
         if ($module == $alias) {
             // OK, we can use a 'fake' module name here
@@ -83,6 +84,7 @@ function articles_userapi_encode_shorturl($args)
     } elseif ($func == 'view') {
 // TODO: review logic of possible combinations
         if (isset($authorid) && $authorid > 0) {
+            // / ( PUBTYPE | articles/PUBTYPE | articles ) / by_author / USERID
             if (isset($ptid) && isset($pubtypes[$ptid])) {
                 $alias = xarModGetAlias($pubtypes[$ptid]['name']);
                 if ($module == $alias) {
@@ -96,6 +98,9 @@ function articles_userapi_encode_shorturl($args)
             }
             $path .= xarML('by_author') . '/' . $authorid;
         } elseif (!empty($catid)) {
+            // / articles / c CATID / PUBTYPE /
+            // / ( PUBTYPE | articles/PUBTYPE ) / c CATID /
+            // / articles / c CATID /
             if (isset($ptid) && isset($pubtypes[$ptid])) {
                 if (isset($bycat)) {
                     $path = '/' . $module . '/c' . $catid
@@ -137,6 +142,7 @@ function articles_userapi_encode_shorturl($args)
             }
 */
         } elseif (isset($ptid) && isset($pubtypes[$ptid])) {
+            // / ( PUBTYPE | articles/PUBTYPE ] /
             $alias = xarModGetAlias($pubtypes[$ptid]['name']);
             if ($module == $alias) {
                 // OK, we can use a 'fake' module name here
@@ -145,6 +151,7 @@ function articles_userapi_encode_shorturl($args)
                 $path = '/' . $module . '/' . $pubtypes[$ptid]['name'] . '/';
             }
         } else {
+            // / ( frontpage | articles ) /
             $alias = xarModGetAlias('frontpage');
             if ($module == $alias) {
                 // OK, we can use a 'fake' module name here
@@ -156,6 +163,8 @@ function articles_userapi_encode_shorturl($args)
     } elseif ($func == 'display' && isset($aid)) {
         if (isset($ptid) && isset($pubtypes[$ptid]))
         {
+            // Has pubtype value
+            // / ( PUBTYPE | articles/PUBTYPE ) / [ c CATID / ] ( Article_Title | AID )
             $alias = xarModGetAlias($pubtypes[$ptid]['name']);
 
             if ($module == $alias) {
@@ -181,6 +190,8 @@ function articles_userapi_encode_shorturl($args)
             }
 
         } else {
+            // Has no pubtype value
+            // / articles / [ c CATID / ] ( Article_Title | AID )
             $path = '/' . $module . "/";
             // pass the cateogry of origin for navigation (xart-000596)
             if ($passNavCategory && !empty($catid) && is_numeric($catid)) {
@@ -196,6 +207,7 @@ function articles_userapi_encode_shorturl($args)
         }
         // TODO: do we want to include categories in the display URL too someday ?
     } elseif ($func == 'redirect' && isset($aid)) {
+        // / ( PUBTYPE | articles/PUBTYPE | articles ) / redirect / AID
         if (isset($ptid) && isset($pubtypes[$ptid])) {
             $alias = xarModGetAlias($pubtypes[$ptid]['name']);
             if ($module == $alias) {
@@ -208,6 +220,7 @@ function articles_userapi_encode_shorturl($args)
             $path = '/' . $module . "/redirect/$aid";
         }
     } elseif ($func == 'monthview') {
+        // / ( PUBTYPE | articles/PUBTYPE | articles ) / monthview / [ ( all | YEAR / MONTH ) / ]
         if (isset($ptid) && isset($pubtypes[$ptid])) {
             $alias = xarModGetAlias($pubtypes[$ptid]['name']);
             if ($module == $alias) {
@@ -228,6 +241,7 @@ function articles_userapi_encode_shorturl($args)
             $path = '/' . $module . '/monthview/';
         }
     } elseif ($func == 'viewmap') {
+        // / ( PUBTYPE | articles/PUBTYPE | articles ) / map /
         if (isset($ptid) && isset($pubtypes[$ptid])) {
             $alias = xarModGetAlias($pubtypes[$ptid]['name']);
             if ($module == $alias) {
@@ -239,6 +253,7 @@ function articles_userapi_encode_shorturl($args)
         }
         $path = '/' . $module . '/map/';
     } elseif ($func == 'search') {
+        // / ( PUBTYPE | articles/PUBTYPE | articles ) / search /
         if (isset($ptid) && isset($pubtypes[$ptid])) {
             $alias = xarModGetAlias($pubtypes[$ptid]['name']);
             if ($module == $alias) {
