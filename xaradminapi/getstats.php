@@ -49,7 +49,7 @@ function articles_adminapi_getstats($args)
                     break;
                 // TODO:  Add SQL queries for Oracle, etc.
                 default:
-                    continue;
+                    continue 2;
             }
         } elseif ($field == 'pubdate_month') {
             $dbtype = xarDBGetType();
@@ -69,7 +69,7 @@ function articles_adminapi_getstats($args)
                     break;
                 // TODO:  Add SQL queries for Oracle, etc.
                 default:
-                    continue;
+                    continue 2;
             }
         } elseif ($field == 'pubdate_day') {
             $dbtype = xarDBGetType();
@@ -89,7 +89,7 @@ function articles_adminapi_getstats($args)
                     break;
                 // TODO:  Add SQL queries for Oracle, etc.
                 default:
-                    continue;
+                    continue 2;
             }
         } else {
             $newfields[] = 'xar_' . $field;
